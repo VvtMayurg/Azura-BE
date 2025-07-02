@@ -34,5 +34,3 @@ django-tenants==3.8.0  # https://github.com/django-tenants/django-tenants
 django-timezone-field==7.1  # https://github.com/mfogel/django-timezone-field/
 django-filter==25.1  # https://github.com/carltongibson/django-filter
 tablib[all]==3.8.0  # https://github.com/jazzband/tablib
-django-import-export==4.3.7  # https://github.com/django-import-export/django-import-export
-django-import-export-extensions==1.6.0  # https://github.com/saritasa-nest/django-import-export-extensions
