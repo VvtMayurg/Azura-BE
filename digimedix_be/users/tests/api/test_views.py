@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.test import APIRequestFactory
 
-from digimedix_be.users.api.views import UserViewSet
+from digimedix_be.users.apis.views import UserViewSet
 from digimedix_be.users.models import User
 
 

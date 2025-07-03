@@ -5,6 +5,7 @@ from .base import INSTALLED_APPS
 from .base import REDIS_URL
 from .base import SPECTACULAR_SETTINGS
 from .base import env
+from datetime import timedelta
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -199,8 +200,20 @@ LOGGING = {
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
+
 SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://digimedix.com", "description": "Production server"},
+    {"url": "https://api.dev.digimedix.com", "description": "Development Server"},
+    {"url": "https://api.qa.digimedix.com", "description": "QA Server"},
+    {"url": "https://api.stage.digimedix.com", "description": "Stage server"},
+    {"url": "https://api.digimedix.com", "description": "Production server"},
 ]
-# Your stuff...
-# ------------------------------------------------------------------------------
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=4),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=12),
+    "USER_ID_FIELD": "uid",
+    "USER_ID_CLAIM": "user_id",
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+}

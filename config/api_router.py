@@ -2,7 +2,7 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
 
-from digimedix_be.users.api.views import UserViewSet
+from digimedix_be.users.apis.views import UserViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
