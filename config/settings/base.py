@@ -48,8 +48,15 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["ENGINE"] = "django_tenants.postgresql_backend"
+DATABASE_ROUTERS = (
+    "django_tenants.routers.TenantSyncRouter",
+)
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Tenant Configurations
+TENANT_MODEL = "organizations.Organization"
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -71,6 +78,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
 ]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
@@ -83,14 +91,22 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "django_tenants",
 ]
 
-LOCAL_APPS = [
+LOCAL_SHARED_APPS = [
     "digimedix_be.users",
-    # Your stuff: custom apps go here
+    "digimedix_be.organizations",
 ]
+
+TENANT_APPS = [
+    "digimedix_be.provider_groups",
+]
+
+SHARED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_SHARED_APPS
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------
@@ -354,5 +370,3 @@ SPECTACULAR_SETTINGS = {
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SCHEMA_PATH_PREFIX": "/api/",
 }
-# Your stuff...
-# ------------------------------------------------------------------------------
