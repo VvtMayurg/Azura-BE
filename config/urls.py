@@ -28,7 +28,7 @@ if settings.DEBUG:
 urlpatterns += [
     # API base url
     path("api/auth/logout/", CustomLogoutView.as_view()),
-    path('password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('api/auth/password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path("api/auth/verify-email/", VerifyEmailView.as_view(), name='rest_verify_email'),
     path("api/auth/resend-email/", ResendEmailVerificationView.as_view(), name="rest_resend_email"),
     path("api/auth/", include('dj_rest_auth.urls')),
