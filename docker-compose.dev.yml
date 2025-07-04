@@ -1,0 +1,89 @@
+volumes:
+  dev_postgres_data: {}
+  dev_postgres_data_backups: {}
+  dev_traefik: {}
+  dev_redis_data: {}
+  dev_mailpit: {}
+
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+
+    image: digimedix_be_dev_django
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: digimedix_be_dev_postgres
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+      - dev_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.production/.postgres
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./compose/production/traefik/Dockerfile-dev
+    image: digimedix_be_dev_traefik
+    depends_on:
+      - django
+    volumes:
+      - dev_traefik:/etc/traefik/acme
+    ports:
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
+
+  redis:
+    image: docker.io/redis:6
+
+    volumes:
+      - dev_redis_data:/data
+
+
+  celeryworker:
+    <<: *django
+    image: digimedix_be_dev_celeryworker
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: digimedix_be_dev_celerybeat
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: digimedix_be_dev_flower
+    command: /start-flower
+
+  awscli:
+    build:
+      context: .
+      dockerfile: ./compose/production/aws/Dockerfile
+    env_file:
+      - ./.envs/.production/.django
+    volumes:
+      - dev_postgres_data_backups:/backups:z
+
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    volumes:
+      - dev_mailpit:/data
+    environment:
+      MP_MAX_MESSAGES: 500
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      MP_UI_AUTH: "admin:Admin@123"
+      MP_DB_FILE: /data/mailpit.db
+

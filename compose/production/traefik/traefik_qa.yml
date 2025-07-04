@@ -28,12 +28,23 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: 'Host(`digimedix.com`) || Host(`www.digimedix.com`)'
+      rule: 'Host(`qa.api.digimedix.com`)'
       entryPoints:
         - web-secure
       middlewares:
         - csrf
       service: django
+      tls:
+        # https://doc.traefik.io/traefik/routing/routers/#certresolver
+        certResolver: letsencrypt
+
+    mailpit-secure-router:
+      rule: 'Host(`qa.mailpit.digimedix.com`)'
+      entryPoints:
+        - web-secure
+      middlewares:
+        - csrf
+      service: mailpit
       tls:
         # https://doc.traefik.io/traefik/routing/routers/#certresolver
         certResolver: letsencrypt
@@ -50,6 +61,11 @@ http:
       loadBalancer:
         servers:
           - url: http://django:5000
+
+    mailpit:
+      loadBalancer:
+        servers:
+          - url: http://mailpit:8025
 
 providers:
   # https://doc.traefik.io/traefik/master/providers/file/
