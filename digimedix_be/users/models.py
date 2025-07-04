@@ -31,6 +31,7 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
         related_name="%(app_label)s_%(class)s_updated_by",
     )
+    organizations = models.ManyToManyField("organizations.Organization", blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
