@@ -96,12 +96,14 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_SHARED_APPS = [
+    "digimedix_be.core",
     "digimedix_be.users",
     "digimedix_be.organizations",
 ]
 
 TENANT_APPS = [
     "digimedix_be.provider_groups",
+    "digimedix_be.locations",
 ]
 
 SHARED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_SHARED_APPS
