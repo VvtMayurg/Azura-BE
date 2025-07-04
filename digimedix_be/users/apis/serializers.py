@@ -1,5 +1,5 @@
+from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import serializers
-from dj_rest_auth.serializers import LoginSerializer, PasswordResetSerializer
 
 from digimedix_be.users.models import User
 

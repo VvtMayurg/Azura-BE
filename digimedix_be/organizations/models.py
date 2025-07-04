@@ -3,6 +3,7 @@ from django_tenants.models import TenantMixin
 
 from digimedix_be.base.models import BaseModel
 
+
 class Organization(BaseModel, TenantMixin):
     name = models.CharField(max_length=100)
 

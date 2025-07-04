@@ -1,4 +1,5 @@
 import uuid
+
 from django.db import models
 
 from digimedix_be.base.context import current_context
@@ -28,6 +29,7 @@ class BaseModel(models.Model):
 
     def save(self, *args, **kwargs):
         from digimedix_be.users.models import User
+
         user = getattr(current_context, "user", None)
         if isinstance(user, User):
             if not self.pk:

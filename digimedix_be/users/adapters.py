@@ -28,9 +28,18 @@ class AccountAdapter(DefaultAccountAdapter):
             password_reset_url = context.get("password_reset_url")
             uid = password_reset_url.split("/")[-3]
             token = password_reset_url.split("/")[-2]
-            password_reset_url = url = f"{self.request.headers.get('Origin') or self.request.get_host()}/auth/forgot-password?uid={uid}&token={token}"
-            if "http://" not in password_reset_url or "https://" not in password_reset_url:
-                password_reset_url = f"https://{password_reset_url}" if self.request.is_secure() else f"http://{password_reset_url}"
+            password_reset_url = url = (
+                f"{self.request.headers.get('Origin') or self.request.get_host()}/auth/forgot-password?uid={uid}&token={token}"
+            )
+            if (
+                "http://" not in password_reset_url
+                or "https://" not in password_reset_url
+            ):
+                password_reset_url = (
+                    f"https://{password_reset_url}"
+                    if self.request.is_secure()
+                    else f"http://{password_reset_url}"
+                )
             context["password_reset_url"] = password_reset_url
         return super().render_mail(template_prefix, email, context, headers)
 

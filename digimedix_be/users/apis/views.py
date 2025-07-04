@@ -1,17 +1,17 @@
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin
-from rest_framework.mixins import RetrieveModelMixin
-from rest_framework.mixins import UpdateModelMixin
-from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
 from dj_rest_auth.views import LogoutView
 from drf_spectacular.utils import extend_schema
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
+from digimedix_be.users.apis.serializers import CustomLogoutSerializer
+from digimedix_be.users.apis.serializers import UserDetailSerializer
 from digimedix_be.users.models import User
 
-from digimedix_be.users.apis.serializers import CustomLogoutSerializer, UserDetailSerializer
 
 class UserViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = UserDetailSerializer
