@@ -2,7 +2,8 @@ from rest_framework import serializers
 from timezone_field.rest_framework import TimeZoneSerializerField
 
 from digimedix_be.base.serializers import AddressSerializer, Base64FileField
-from digimedix_be.provider_groups.models import ProviderGroup
+from digimedix_be.provider_groups.models import ProviderGroup, Department
+from digimedix_be.users.apis.serializers import UserRelativeSerializer
 
 
 class ProviderGroupPostSerializer(serializers.ModelSerializer):
@@ -33,4 +34,32 @@ class ProviderGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProviderGroup
-        fields = "__all__"
+        fields = (
+            "id",
+            "created_at",
+            "updated_at",
+            "group_name",
+            "website",
+            "email",
+            "status",
+            "picture",
+            "phone",
+            "billing_address",
+            "physical_address",
+            "bio",
+            "timezone",
+        )
+
+
+class DepartmentPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ("name", "admin", "phone", "active")
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    admin = UserRelativeSerializer()
+
+    class Meta:
+        model = Department
+        fields = ("id", "created_at", "updated_at", "name", "admin", "phone", "active")

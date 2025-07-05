@@ -4,6 +4,7 @@ from timezone_field.fields import TimeZoneField
 
 from digimedix_be.base.constants import ProviderGroupLocationStatusChoices
 from digimedix_be.base.models import BaseModel
+from digimedix_be.users.models import User
 
 
 class ProviderGroup(BaseModel):
@@ -45,3 +46,26 @@ class ProviderGroup(BaseModel):
 
     def __str__(self) -> str:
         return self.group_name
+
+
+class Department(BaseModel):
+    name = models.CharField(max_length=255)
+    admin = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="department_admins"
+    )
+    provider_group = models.ForeignKey(ProviderGroup, on_delete=models.PROTECT, related_name="departments")
+    phone = models.CharField(
+        max_length=15,
+        validators=[
+            RegexValidator(
+                regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
+                message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
+                code="invalid_phone",
+            )
+        ],
+        blank=True,
+    )
+    active = models.BooleanField(default=True)
+    
+    class Meta:
+        unique_together = (("name", "provider_group"),)
