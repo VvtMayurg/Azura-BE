@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
 
 from digimedix_be.core.apis.views import SpecialtyViewSet
+from digimedix_be.locations.apis.views import LocationViewSet
 from digimedix_be.provider_groups.apis.views import DepartmentViewSet, ProviderGroupViewSet
 from digimedix_be.users.apis.views import UserViewSet
 
@@ -12,6 +13,7 @@ router.register("users", UserViewSet)
 router.register("specialties", SpecialtyViewSet)
 router.register("provider-groups", ProviderGroupViewSet)
 router.register("departments", DepartmentViewSet)
+router.register("locations", LocationViewSet)
 
 
 app_name = "api"

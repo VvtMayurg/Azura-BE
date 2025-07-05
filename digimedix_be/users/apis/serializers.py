@@ -11,7 +11,7 @@ class CustomLoginSerializer(LoginSerializer):
 class CustomLogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 
-class UserRelativeSerializer(serializers.ModelSerializer):
+class UserRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "email", "first_name", "last_name")
