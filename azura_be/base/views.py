@@ -12,7 +12,7 @@ class HomeView(View):
                 "status": "active",
                 "version": "1",
                 "releaseId": "1.0.0",
-                "description": "Health of DigiMedix service",
+                "description": "Health of Azura service",
                 "links": {"API Docs": "/api/docs/"},
             },
         )

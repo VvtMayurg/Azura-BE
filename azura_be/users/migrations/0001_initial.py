@@ -4,7 +4,7 @@ import django.utils.timezone
 from django.db import migrations
 from django.db import models
 
-import digimedix_be.users.models
+import azura_be.users.models
 
 
 class Migration(migrations.Migration):
@@ -106,7 +106,7 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
             managers=[
-                ("objects", digimedix_be.users.models.UserManager()),
+                ("objects", azura_be.users.models.UserManager()),
             ],
         ),
     ]

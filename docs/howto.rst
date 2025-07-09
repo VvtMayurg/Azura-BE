@@ -4,7 +4,7 @@ How To - Project Documentation
 Get Started
 ----------------------------------------------------------------------
 
-Documentation can be written as rst files in `digimedix_be/docs`.
+Documentation can be written as rst files in `azura_be/docs`.
 
 
 To build and serve docs, use the commands::

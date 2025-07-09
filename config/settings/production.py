@@ -13,7 +13,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["digimedix.com"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["azura.com"])
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -111,14 +111,14 @@ MEDIA_URL = f"https://{aws_s3_domain}/media/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL",
-    default="DigiMedix Backend Application <noreply@digimedix.com>",
+    default="Azura Backend Application <noreply@azura.com>",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = env(
     "DJANGO_EMAIL_SUBJECT_PREFIX",
-    default="[DigiMedix Backend Application] ",
+    default="[Azura Backend Application] ",
 )
 ACCOUNT_EMAIL_SUBJECT_PREFIX = EMAIL_SUBJECT_PREFIX
 
@@ -225,10 +225,10 @@ LOGGING = {
 # Tools that generate code samples can use SERVERS to point to the correct domain
 
 SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://api.dev.digimedix.com", "description": "Development Server"},
-    {"url": "https://api.qa.digimedix.com", "description": "QA Server"},
-    {"url": "https://api.stage.digimedix.com", "description": "Stage server"},
-    {"url": "https://api.digimedix.com", "description": "Production server"},
+    {"url": "https://api.dev.azura.com", "description": "Development Server"},
+    {"url": "https://api.qa.azura.com", "description": "QA Server"},
+    {"url": "https://api.stage.azura.com", "description": "Stage server"},
+    {"url": "https://api.azura.com", "description": "Production server"},
 ]
 
 

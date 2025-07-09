@@ -20,9 +20,9 @@ def main():
         ) from exc
 
     # This allows easy placement of apps within the interior
-    # digimedix_be directory.
+    # azura_be directory.
     current_path = Path(__file__).parent.resolve()
-    sys.path.append(str(current_path / "digimedix_be"))
+    sys.path.append(str(current_path / "azura_be"))
 
     execute_from_command_line(sys.argv)
 

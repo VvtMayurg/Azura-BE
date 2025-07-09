@@ -11,7 +11,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-    image: digimedix_be_production_django
+    image: azura_be_production_django
     depends_on:
       - postgres
       - redis
@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/traefik/Dockerfile
-    image: digimedix_be_production_traefik
+    image: azura_be_production_traefik
     depends_on:
       - django
     volumes:
@@ -35,10 +35,10 @@ services:
 
   celeryworker:
     <<: *django
-    image: digimedix_be_production_celeryworker
+    image: azura_be_production_celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
-    image: digimedix_be_production_celerybeat
+    image: azura_be_production_celerybeat
     command: /start-celerybeat

@@ -28,7 +28,7 @@ django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = "DigiMedix Backend Application"
+project = "Azura Backend Application"
 copyright = """2025, Vikash Singh"""  # noqa: A001
 author = "Vikash Singh"
 

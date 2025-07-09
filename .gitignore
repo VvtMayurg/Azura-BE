@@ -269,7 +269,7 @@ tags
 dump.rdb
 
 ### Project template
-digimedix_be/media/
+azura_be/media/
 
 .pytest_cache/
 .ipython/

@@ -1,7 +1,7 @@
 services:
   docs:
-    image: digimedix_be_local_docs
-    container_name: digimedix_be_local_docs
+    image: azura_be_local_docs
+    container_name: azura_be_local_docs
     build:
       context: .
       dockerfile: ./compose/local/docs/Dockerfile
@@ -10,7 +10,7 @@ services:
     volumes:
       - ./docs:/docs:z
       - ./config:/app/config:z
-      - ./digimedix_be:/app/digimedix_be:z
+      - ./azura_be:/app/azura_be:z
     ports:
       - '9000:9000'
     command: /start-docs

@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
 
-    image: digimedix_be_qa_django
+    image: azura_be_qa_django
     depends_on:
       - postgres
       - redis
@@ -26,7 +26,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: digimedix_be_qa_postgres
+    image: azura_be_qa_postgres
     volumes:
       - qa_postgres_data:/var/lib/postgresql/data
       - qa_postgres_data_backups:/backups
@@ -37,7 +37,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/traefik/Dockerfile-qa
-    image: digimedix_be_qa_traefik
+    image: azura_be_qa_traefik
     depends_on:
       - django
     volumes:
@@ -55,17 +55,17 @@ services:
 
   celeryworker:
     <<: *django
-    image: digimedix_be_qa_celeryworker
+    image: azura_be_qa_celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
-    image: digimedix_be_qa_celerybeat
+    image: azura_be_qa_celerybeat
     command: /start-celerybeat
 
   flower:
     <<: *django
-    image: digimedix_be_qa_flower
+    image: azura_be_qa_flower
     command: /start-flower
 
   awscli:

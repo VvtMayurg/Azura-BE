@@ -8,8 +8,8 @@ from pathlib import Path
 import environ
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# digimedix_be/
-APPS_DIR = BASE_DIR / "digimedix_be"
+# azura_be/
+APPS_DIR = BASE_DIR / "azura_be"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
@@ -96,14 +96,14 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_SHARED_APPS = [
-    "digimedix_be.core",
-    "digimedix_be.users",
-    "digimedix_be.organizations",
+    "azura_be.core",
+    "azura_be.users",
+    "azura_be.organizations",
 ]
 
 TENANT_APPS = [
-    "digimedix_be.provider_groups",
-    "digimedix_be.locations",
+    "azura_be.provider_groups",
+    "azura_be.locations",
 ]
 
 SHARED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_SHARED_APPS
@@ -114,7 +114,7 @@ INSTALLED_APPS = SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-MIGRATION_MODULES = {"sites": "digimedix_be.contrib.sites.migrations"}
+MIGRATION_MODULES = {"sites": "azura_be.contrib.sites.migrations"}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -211,7 +211,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "digimedix_be.users.context_processors.allauth_settings",
+                "azura_be.users.context_processors.allauth_settings",
             ],
         },
     },
@@ -253,7 +253,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Vikash Singh""", "vikash-singh@digimedix.com")]
+ADMINS = [("""Vikash Singh""", "vikash-singh@azura.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
@@ -338,13 +338,13 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # https://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://docs.allauth.org/en/latest/account/configuration.html
-ACCOUNT_ADAPTER = "digimedix_be.users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "azura_be.users.adapters.AccountAdapter"
 # https://docs.allauth.org/en/latest/account/forms.html
-ACCOUNT_FORMS = {"signup": "digimedix_be.users.forms.UserSignupForm"}
+ACCOUNT_FORMS = {"signup": "azura_be.users.forms.UserSignupForm"}
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
-SOCIALACCOUNT_ADAPTER = "digimedix_be.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "azura_be.users.adapters.SocialAccountAdapter"
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
-SOCIALACCOUNT_FORMS = {"signup": "digimedix_be.users.forms.UserSocialSignupForm"}
+SOCIALACCOUNT_FORMS = {"signup": "azura_be.users.forms.UserSocialSignupForm"}
 # django-compressor
 # ------------------------------------------------------------------------------
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
@@ -361,7 +361,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_PAGINATION_CLASS": "digimedix_be.base.paginations.DefaultPagination",
+    "DEFAULT_PAGINATION_CLASS": "azura_be.base.paginations.DefaultPagination",
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
@@ -370,8 +370,8 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "DigiMedix Backend Application API",
-    "DESCRIPTION": "Documentation of API endpoints of DigiMedix Backend Application",
+    "TITLE": "Azura Backend Application API",
+    "DESCRIPTION": "Documentation of API endpoints of Azura Backend Application",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
     "SCHEMA_PATH_PREFIX": "/api/",
@@ -384,8 +384,8 @@ REST_AUTH = {
     "JWT_AUTH_HTTPONLY": False,
     "OLD_PASSWORD_FIELD_ENABLED": True,
     "LOGOUT_ON_PASSWORD_CHANGE": True,
-    "LOGIN_SERIALIZER": "digimedix_be.users.apis.serializers.CustomLoginSerializer",
-    "USER_DETAILS_SERIALIZER": "digimedix_be.users.apis.serializers.UserDetailSerializer",
+    "LOGIN_SERIALIZER": "azura_be.users.apis.serializers.CustomLoginSerializer",
+    "USER_DETAILS_SERIALIZER": "azura_be.users.apis.serializers.UserDetailSerializer",
 }
 
 
