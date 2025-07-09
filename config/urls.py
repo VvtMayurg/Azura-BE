@@ -11,8 +11,8 @@ from django.views import defaults as default_views
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 
-from digimedix_be.base.views import HomeView
-from digimedix_be.users.apis.views import CustomLogoutView
+from azura_be.base.views import HomeView
+from azura_be.users.apis.views import CustomLogoutView
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),

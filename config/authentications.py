@@ -2,7 +2,7 @@ from drf_spectacular.contrib.rest_framework_simplejwt import SimpleJWTScheme
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
-from digimedix_be.base.context import current_context
+from azura_be.base.context import current_context
 
 ORGANIZATION_USER_DOES_NOT_EXISTS_MESSAGE = "User is not belongs to this organization"
 

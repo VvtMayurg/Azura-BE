@@ -8,7 +8,7 @@ from django_tenants.utils import get_public_schema_urlconf
 from django_tenants.utils import get_tenant_types
 from django_tenants.utils import has_multi_type_tenants
 
-from digimedix_be.organizations.models import Organization
+from azura_be.organizations.models import Organization
 
 class OrganizationMainMiddleware(MiddlewareMixin):
     def process_request(self, request):

@@ -2,10 +2,10 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
 
-from digimedix_be.core.apis.views import SpecialtyViewSet
-from digimedix_be.locations.apis.views import LocationViewSet
-from digimedix_be.provider_groups.apis.views import DepartmentViewSet, ProviderGroupViewSet
-from digimedix_be.users.apis.views import UserViewSet
+from azura_be.core.apis.views import SpecialtyViewSet
+from azura_be.locations.apis.views import LocationViewSet
+from azura_be.provider_groups.apis.views import DepartmentViewSet, ProviderGroupViewSet
+from azura_be.users.apis.views import UserViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
