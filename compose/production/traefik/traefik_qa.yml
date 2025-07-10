@@ -5,15 +5,15 @@ entryPoints:
   web:
     # http
     address: ':80'
-    http:
-      # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
-      redirections:
-        entryPoint:
-          to: web-secure
+    # http:
+    #   # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
+    #   redirections:
+    #     entryPoint:
+    #       to: web-secure
 
-  web-secure:
-    # https
-    address: ':443'
+  # web-secure:
+  #   # https
+  #   address: ':443'
 
 certificatesResolvers:
   letsencrypt:
@@ -30,7 +30,7 @@ http:
     web-secure-router:
       rule: 'Host(`qa.api.azura.com`)'
       entryPoints:
-        - web-secure
+        - web
       middlewares:
         - csrf
       service: django
@@ -41,7 +41,7 @@ http:
     mailpit-secure-router:
       rule: 'Host(`qa.mailpit.azura.com`)'
       entryPoints:
-        - web-secure
+        - web
       middlewares:
         - csrf
       service: mailpit

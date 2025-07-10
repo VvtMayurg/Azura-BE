@@ -12,7 +12,6 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-
     image: azura_be_qa_django
     depends_on:
       - postgres
@@ -48,7 +47,6 @@ services:
 
   redis:
     image: docker.io/redis:6
-
     volumes:
       - qa_redis_data:/data
 
@@ -62,20 +60,6 @@ services:
     <<: *django
     image: azura_be_qa_celerybeat
     command: /start-celerybeat
-
-  flower:
-    <<: *django
-    image: azura_be_qa_flower
-    command: /start-flower
-
-  awscli:
-    build:
-      context: .
-      dockerfile: ./compose/production/aws/Dockerfile
-    env_file:
-      - ./.envs/.production/.django
-    volumes:
-      - qa_postgres_data_backups:/backups:z
 
   mailpit:
     image: docker.io/axllent/mailpit:latest

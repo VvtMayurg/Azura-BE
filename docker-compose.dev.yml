@@ -11,7 +11,6 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-
     image: azura_be_dev_django
     depends_on:
       - postgres
@@ -47,7 +46,6 @@ services:
 
   redis:
     image: docker.io/redis:6
-
     volumes:
       - dev_redis_data:/data
 
@@ -62,20 +60,6 @@ services:
     image: azura_be_dev_celerybeat
     command: /start-celerybeat
 
-  flower:
-    <<: *django
-    image: azura_be_dev_flower
-    command: /start-flower
-
-  awscli:
-    build:
-      context: .
-      dockerfile: ./compose/production/aws/Dockerfile
-    env_file:
-      - ./.envs/.production/.django
-    volumes:
-      - dev_postgres_data_backups:/backups:z
-
   mailpit:
     image: docker.io/axllent/mailpit:latest
     volumes:
@@ -86,4 +70,3 @@ services:
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
       MP_UI_AUTH: "admin:Admin@123"
       MP_DB_FILE: /data/mailpit.db
-
