@@ -45,8 +45,10 @@ jobs:
           docker tag azura_be_qa_celerybeat:latest $ECR_REGISTRY/azura/celerybeat:$IMAGE_TAG
           docker tag azura_be_qa_celeryworker:latest $ECR_REGISTRY/azura/celeryworker:$IMAGE_TAG
           docker tag azura_be_qa_django:latest $ECR_REGISTRY/azura/django:$IMAGE_TAG
+          docker tag azura_be_qa_postgres:latest $ECR_REGISTRY/azura/postgres:$IMAGE_TAG
 
           docker push $ECR_REGISTRY/azura/traefik:$IMAGE_TAG
           docker push $ECR_REGISTRY/azura/celerybeat:$IMAGE_TAG
           docker push $ECR_REGISTRY/azura/celeryworker:$IMAGE_TAG
           docker push $ECR_REGISTRY/azura/django:$IMAGE_TAG
+          docker push $ECR_REGISTRY/azura/postgres:$IMAGE_TAG
