@@ -34,9 +34,9 @@ http:
       middlewares:
         - csrf
       service: django
-      tls:
-        # https://doc.traefik.io/traefik/routing/routers/#certresolver
-        certResolver: letsencrypt
+      # tls:
+      #   # https://doc.traefik.io/traefik/routing/routers/#certresolver
+      #   certResolver: letsencrypt
 
     mailpit-secure-router:
       rule: 'Host(`mailpit.qa.azuraemr.com`)'
@@ -45,9 +45,9 @@ http:
       middlewares:
         - csrf
       service: mailpit
-      tls:
-        # https://doc.traefik.io/traefik/routing/routers/#certresolver
-        certResolver: letsencrypt
+      # tls:
+      #   # https://doc.traefik.io/traefik/routing/routers/#certresolver
+      #   certResolver: letsencrypt
 
   middlewares:
     csrf:
