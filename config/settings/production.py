@@ -226,10 +226,10 @@ LOGGING = {
 # Tools that generate code samples can use SERVERS to point to the correct domain
 
 SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://api.dev.azura.com", "description": "Development Server"},
-    {"url": "https://api.qa.azura.com", "description": "QA Server"},
-    {"url": "https://api.stage.azura.com", "description": "Stage server"},
-    {"url": "https://api.azura.com", "description": "Production server"},
+    {"url": "https://api.dev.azuraemr.com", "description": "Development Server"},
+    {"url": "https://api.qa.azuraemr.com", "description": "QA Server"},
+    {"url": "https://api.stage.azuraemr.com", "description": "Stage server"},
+    {"url": "https://api.azuraemr.com", "description": "Production server"},
 ]
 
 
