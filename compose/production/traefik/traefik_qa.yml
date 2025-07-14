@@ -28,7 +28,7 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: 'Host(`qa.api.azura.com`)'
+      rule: 'Host(`api.qa.azuraemr.com`)'
       entryPoints:
         - web
       middlewares:
@@ -39,7 +39,7 @@ http:
         certResolver: letsencrypt
 
     mailpit-secure-router:
-      rule: 'Host(`qa.mailpit.azura.com`)'
+      rule: 'Host(`mailpit.qa.azuraemr.com`)'
       entryPoints:
         - web
       middlewares:
