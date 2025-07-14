@@ -5,13 +5,13 @@ from timezone_field.fields import TimeZoneField
 from azura_be.base.constants import DayChoices, ProviderGroupLocationStatusChoices
 from azura_be.base.models import BaseModel
 from azura_be.core.models import Specialty
-from azura_be.provider_groups.models import Department, ProviderGroup
+from azura_be.provider_groups.models import ProviderGroup
 
 
 class Location(BaseModel):
     name = models.CharField(max_length=255)
     provider_group = models.ForeignKey(ProviderGroup, on_delete=models.PROTECT, related_name="locations")
-    email = models.EmailField()
+    email = models.EmailField(blank=True)
     phone = models.CharField(
         max_length=15,
         validators=[
@@ -22,7 +22,6 @@ class Location(BaseModel):
             )
         ],
         blank=True,
-        unique=True,
     )
     npi = models.CharField(max_length=10, unique=True)
     fax = models.CharField(max_length=15, unique=True)
@@ -42,7 +41,6 @@ class Location(BaseModel):
         default=ProviderGroupLocationStatusChoices.PENDING.name,
     )
     picture = models.ImageField(upload_to="locations/", null=True, blank=True)
-    departments = models.ManyToManyField(Department, blank=True)
     specialties = models.ManyToManyField(Specialty, blank=True)
 
     class Meta:

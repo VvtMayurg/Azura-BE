@@ -55,7 +55,7 @@ DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Tenant Configurations
-TENANT_MODEL = "organizations.Organization"
+TENANT_MODEL = "business_accounts.BusinessAccount"
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ THIRD_PARTY_APPS = [
 LOCAL_SHARED_APPS = [
     "azura_be.core",
     "azura_be.users",
-    "azura_be.organizations",
+    "azura_be.business_accounts",
 ]
 
 TENANT_APPS = [
@@ -156,7 +156,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
-    "config.middleware.OrganizationMainMiddleware",
+    "config.middleware.BusinessAccountMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",

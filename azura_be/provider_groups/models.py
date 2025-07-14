@@ -8,7 +8,7 @@ from azura_be.users.models import User
 
 
 class ProviderGroup(BaseModel):
-    group_name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     website = models.URLField(blank=True)
     email = models.EmailField(blank=True)
     status = models.CharField(
@@ -49,11 +49,14 @@ class ProviderGroup(BaseModel):
 
 
 class Department(BaseModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    code = models.CharField(max_length=50, null=True, unique=True)
+    description = models.TextField(blank=True)
     admin = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="department_admins"
     )
-    provider_group = models.ForeignKey(ProviderGroup, on_delete=models.PROTECT, related_name="departments")
+    provider_groups = models.ManyToManyField(ProviderGroup, related_name="departments")
+    locations = models.ManyToManyField("locations.Location", related_name="departments")
     phone = models.CharField(
         max_length=15,
         validators=[
@@ -66,6 +69,3 @@ class Department(BaseModel):
         blank=True,
     )
     active = models.BooleanField(default=True)
-    
-    class Meta:
-        unique_together = (("name", "provider_group"),)

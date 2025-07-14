@@ -4,7 +4,11 @@ from timezone_field.rest_framework import TimeZoneSerializerField
 from azura_be.base.serializers import AddressSerializer, Base64FileField
 from azura_be.core.apis.serializers import SpecialtyRelatedSerializer
 from azura_be.locations.models import Location, LocationWorkingHour
-from azura_be.provider_groups.apis.serializers import DepartmentRelatedSerializer
+
+class LocationRelatedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ("id", "name", "email")
 
 class LocationWorkingHourSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,7 +25,7 @@ class LocationPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ("name", "email", "phone", "npi", "fax", "timezone", "note", "billing_address", "physical_address", "status", "picture", "departments", "specialties", "working_hours")
+        fields = ("name", "email", "phone", "npi", "fax", "timezone", "note", "billing_address", "physical_address", "status", "picture", "specialties", "working_hours")
 
     def create(self, validated_data):
         working_hours = validated_data.pop("working_hours", [])
@@ -45,6 +49,10 @@ class LocationPostSerializer(serializers.ModelSerializer):
             else:
                 LocationWorkingHour.objects.create(location=location, **working_hour)
 
+class ProviderGroupRelatedSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    name = serializers.CharField()
+    email = serializers.EmailField()
 
 class LocationSerializer(serializers.ModelSerializer):
     timezone = TimeZoneSerializerField()
@@ -52,9 +60,17 @@ class LocationSerializer(serializers.ModelSerializer):
     physical_address = AddressSerializer(required=False)
     working_hours = LocationWorkingHourSerializer(many=True, required=False)
     specialties = SpecialtyRelatedSerializer(many=True, required=False)
-    departments = DepartmentRelatedSerializer(many=True, required=False)
+    provider_group = serializers.SerializerMethodField()
+
+    def get_provider_group(self, instance) -> ProviderGroupRelatedSerializer:
+        provider_group = instance.provider_group
+        return {
+            "id": str(provider_group.id),
+            "name": str(provider_group.name),
+            "email": str(provider_group.email),
+        }
 
     class Meta:
         model = Location
-        fields = ("id", "created_at", "updated_at","name", "email", "phone", "npi", "fax", "timezone", "note", "billing_address", "physical_address", "status", "picture", "departments", "specialties", "working_hours")
+        fields = ("id", "provider_group", "created_at", "updated_at","name", "email", "phone", "npi", "fax", "timezone", "note", "billing_address", "physical_address", "status", "picture", "specialties", "working_hours")
 
