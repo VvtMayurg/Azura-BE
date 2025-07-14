@@ -6,8 +6,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
 from azura_be.base.filterset_classes import SpecialtyFilter
-from azura_be.core.apis.serializers import SpecialtyGetSerializer, SpecialtyPostSerializer
-from azura_be.core.models import Specialty
+from azura_be.core.apis.serializers import SpecialtyGetSerializer, SpecialtyPostSerializer, ICDCodeGetSerializer, ICDCodeSerializer, ConditionGetSerializer, ConditionSerializer, CPTCodeGetSerializer, CPTCodeSerializer, HCPCSCodeGetSerializer, HCPCSCodeSerializer, RxCodeGetSerializer, RxCodeSerializer, LoincCodeGetSerializer, LoincCodeSerializer
+from azura_be.core.models import Specialty, ICDCode, Condition, CPTCode, HCPCSCode, RxCode, LoincCode
 
 
 class SpecialtyViewSet(viewsets.ModelViewSet):
@@ -51,3 +51,72 @@ class SpecialtyViewSet(viewsets.ModelViewSet):
         page = self.paginate_queryset(specialties)
         serializer = SpecialtyGetSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+class ICDCodeViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    queryset = ICDCode.objects.all()
+    serializer_class = ICDCodeGetSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return ICDCodeSerializer
+        return super().get_serializer_class()
+
+
+class ConditionViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    queryset = Condition.objects.all()
+    serializer_class = ConditionGetSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return ConditionSerializer
+        return super().get_serializer_class()
+
+class CPTCodeViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    queryset = CPTCode.objects.all()
+    serializer_class = CPTCodeGetSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return CPTCodeSerializer
+        return super().get_serializer_class()
+
+
+class HCPCSCodeViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    queryset = HCPCSCode.objects.all()
+    serializer_class = HCPCSCodeGetSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return HCPCSCodeSerializer
+        return super().get_serializer_class()
+
+class RxCodeViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    queryset = RxCode.objects.all()
+    serializer_class = RxCodeGetSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return RxCodeSerializer
+        return super().get_serializer_class()
+
+class LoincCodeViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    queryset = LoincCode.objects.all()
+    serializer_class = LoincCodeGetSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return LoincCodeSerializer
+        return super().get_serializer_class()
