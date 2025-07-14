@@ -1,6 +1,7 @@
 from dj_rest_auth.views import LogoutView
-from drf_spectacular.utils import extend_schema
-from rest_framework import status
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.mixins import UpdateModelMixin
@@ -8,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from azura_be.business_accounts.models import BusinessAccount
+from azura_be.business_accounts.serializers import BusinessAccountSignUpSerializer
 from azura_be.users.apis.serializers import CustomLogoutSerializer
 from azura_be.users.apis.serializers import UserDetailSerializer
 from azura_be.users.models import User
@@ -32,3 +35,17 @@ class UserViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
 class CustomLogoutView(LogoutView):
     permission_classes = [IsAuthenticated]
     http_method_names = ["post"]
+
+
+
+class BusinessAccountSignUpViewSet(viewsets.GenericViewSet):
+    queryset = BusinessAccount.objects.all()
+    serializer_class = BusinessAccountSignUpSerializer
+
+    @action(detail=False, methods=["POST"], url_path="signup")
+    def signup(self, request):
+        serializer = BusinessAccountSignUpSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        if not serializer.validated_data.pop("validate_only", False):
+            serializer.save()
+        return Response(serializer.data)

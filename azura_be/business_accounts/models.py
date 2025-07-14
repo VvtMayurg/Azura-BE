@@ -23,7 +23,7 @@ class BusinessAccount(BaseModel, TenantMixin):
     email = models.EmailField(unique=True)
     website = models.URLField(unique=True)
     grace_code = models.CharField(max_length=255)
-    web_address = models.URLField(unique=True)
+    web_address = models.URLField(unique=True, null=True)
 
     auto_create_schema = True
 
