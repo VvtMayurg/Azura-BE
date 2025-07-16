@@ -86,3 +86,10 @@ class CommunicationTemplateUserTypeChoices(models.TextChoices):
     PROVIDER = "Provider"
     PATIENT = "Patient"
     ALL = "All"
+
+
+class GenderChoices(models.TextChoices):
+    MALE = "Male"
+    FEMALE = "Female"
+    OTHER = "Other"
+    UNKNOWN = "Unknown"
