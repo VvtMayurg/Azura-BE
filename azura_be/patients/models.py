@@ -8,7 +8,7 @@ from azura_be.provider_groups.models import ProviderGroup
 
 
 class Patient(BaseModel):
-    first_name = models.CharField(max_lenght=255)
+    first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=25, choices=GenderChoices)

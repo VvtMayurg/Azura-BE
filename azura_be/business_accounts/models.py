@@ -61,7 +61,7 @@ class EmailConfiguration(BaseModel):
 
 class SMSConfiguration(BaseModel):
     business_account = models.OneToOneField(BusinessAccount, on_delete=models.CASCADE, related_name="sms_configuration")
-    provider = models.CharField(max_length=5, choices=SMSConfigurationProviderChoices)
+    provider = models.CharField(max_length=15, choices=SMSConfigurationProviderChoices)
     from_number = models.CharField(max_length=15)
     cred_json = models.JSONField()
 

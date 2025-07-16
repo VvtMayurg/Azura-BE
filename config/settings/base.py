@@ -106,6 +106,7 @@ LOCAL_SHARED_APPS = [
 TENANT_APPS = [
     "azura_be.provider_groups",
     "azura_be.locations",
+    "azura_be.patients",
 ]
 
 SHARED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_SHARED_APPS
