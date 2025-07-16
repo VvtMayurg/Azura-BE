@@ -6,6 +6,7 @@ from azura_be.core.apis.views import SpecialtyViewSet, ICDCodeViewSet, Condition
 from azura_be.locations.apis.views import LocationViewSet
 from azura_be.provider_groups.apis.views import DepartmentViewSet, ProviderGroupViewSet
 from azura_be.users.apis.views import UserViewSet, BusinessAccountSignUpViewSet
+from azura_be.business_accounts.apis.views import AccountConfigurationViseSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
@@ -21,6 +22,7 @@ router.register("cpt-codes", CPTCodeViewSet)
 router.register("hcpcs-codes", HCPCSCodeViewSet)
 router.register("rx-codes", RxCodeViewSet)
 router.register("loinc-codes", LoincCodeViewSet)
+router.register("account", AccountConfigurationViseSet, basename="account-configurations")
 
 
 app_name = "api"

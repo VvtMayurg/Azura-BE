@@ -3,7 +3,8 @@ from rest_framework import serializers
 from allauth.account.utils import setup_user_email
 from django.core.exceptions import ValidationError as DjangoValidationError
 
-from azura_be.business_accounts.models import BusinessAccount
+from azura_be.business_accounts.models import BusinessAccount, CommunicationTemplate, CommunicationTemplateVersion, EmailConfiguration, SMSConfiguration
+from azura_be.users.apis.serializers import UserRelatedSerializer
 from azura_be.users.models import User
 
 
@@ -18,6 +19,7 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = BusinessAccount
         fields = ("name", "discipline_service", "address", "contact", "email", "website", "grace_code", "web_address", "user_email", "first_name", "last_name", "password1", "password2", "validate_only")
+        extra_kwargs = {"password1": {"write_only": True}, "password1": {"write_only": True}}
 
     def validate_user_email(self, email):
         email = get_adapter().clean_email(email.lower())
@@ -65,3 +67,35 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
         user = self.save_user(self.context.get("request"))
         validated_data.update({"created_by": user})
         return super().create(validated_data)
+
+
+class EmailConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailConfiguration
+        fields = ("host", "port", "username", "password", "from_email", "protocol", "authentication")
+        extra_kwargs = {"password": {"write_only": True}}
+
+class SMSConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SMSConfiguration
+        fields = ("provider", "from_number", "cred_json")
+        extra_kwargs = {"cred_json": {"write_only": True}}
+
+class CommunicationTemplateSerializer(serializers.ModelSerializer):
+    created_by = UserRelatedSerializer(required=False)
+    updated_by = UserRelatedSerializer(required=False)
+
+    class Meta:
+        model = CommunicationTemplate
+        fields = ("id", "created_at", "updated_at", "created_by", "updated_by", "name", "type", "user_type", "subject", "content", "active")
+        read_only_fields = ("id", "created_at", "updated_at", "created_by", "updated_by")
+
+    def update(self, instance, validated_data):
+        old_content = instance.content
+        old_subject = instance.subject
+        instance = super().update(instance, validated_data)
+        new_content = instance.content
+        new_subject = instance.subject
+
+        if old_content != new_content or old_subject != new_subject:
+            CommunicationTemplateVersion.objects.create(template=instance, old_content=old_content, old_subject=old_subject, new_content=new_content, new_subject=new_subject)

@@ -68,3 +68,21 @@ class DisciplineChoices(models.TextChoices):
     WOMENS_HEALTH = "Women's Health"
     YOGA = "Yoga"
     UNKNOWN = "I can't find my discipline"
+
+class EmailConfigurationProtocolChoices(models.TextChoices):
+    TLS = "TLS"
+    SSL = "SSL"
+
+class SMSConfigurationProviderChoices(models.TextChoices):
+    TWILLIO = "Twillio"
+
+class CommunicationTemplateTypeChoices(models.TextChoices):
+    SMS = "SMS"
+    EMAIL = "Email"
+
+
+class CommunicationTemplateUserTypeChoices(models.TextChoices):
+    ADMIN = "Admin"
+    PROVIDER = "Provider"
+    PATIENT = "Patient"
+    ALL = "All"

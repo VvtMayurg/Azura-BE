@@ -1,6 +1,5 @@
 from dj_rest_auth.views import LogoutView
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin
@@ -10,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from azura_be.business_accounts.models import BusinessAccount
-from azura_be.business_accounts.serializers import BusinessAccountSignUpSerializer
+from azura_be.business_accounts.apis.serializers import BusinessAccountSignUpSerializer
 from azura_be.users.apis.serializers import CustomLogoutSerializer
 from azura_be.users.apis.serializers import UserDetailSerializer
 from azura_be.users.models import User
