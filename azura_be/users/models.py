@@ -3,6 +3,7 @@ from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from azura_be.base.constants import DayChoices
 from timezone_field.fields import TimeZoneField
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
@@ -78,17 +79,7 @@ class License(BaseModel):
 
 
 class WorkShedule(BaseModel):
-    monday_start = models.TimeField(null=True, blank=True)
-    monday_end = models.TimeField(null=True, blank=True)
-    tuesday_start = models.TimeField(null=True, blank=True)
-    tuesday_end = models.TimeField(null=True, blank=True)
-    wednesday_start = models.TimeField(null=True, blank=True)
-    wednesday_end = models.TimeField(null=True, blank=True)
-    thursday_start = models.TimeField(null=True, blank=True)
-    thursday_end = models.TimeField(null=True, blank=True)
-    friday_start = models.TimeField(null=True, blank=True)
-    friday_end = models.TimeField(null=True, blank=True)
-    saturday_start = models.TimeField(null=True, blank=True)
-    saturday_end = models.TimeField(null=True, blank=True)
-    sunday_start = models.TimeField(null=True, blank=True)
-    sunday_end = models.TimeField(null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="schedules")
+    day = models.CharField(max_length=5, choices=DayChoices)
+    start = models.TimeField()
+    end = models.TimeField()
