@@ -2,7 +2,6 @@
 
 import django.core.validators
 import django.db.models.deletion
-import django.utils.timezone
 import timezone_field.fields
 import uuid
 from django.conf import settings

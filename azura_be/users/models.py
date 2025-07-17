@@ -78,6 +78,9 @@ class License(BaseModel):
     dea_number = models.CharField(max_length=50, blank=True)
     specialties = models.ManyToManyField(Specialty, blank=True)
 
+    class Meta:
+        unique_together = (("user", "number"),)
+
 
 class WorkShedule(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="schedules")
