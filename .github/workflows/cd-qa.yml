@@ -1,0 +1,24 @@
+name: Azura CD Development
+
+on: workflow_dispatch
+
+jobs:
+  Deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: SSH and Deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          HOST_NAME: ${{secrets.DEV_HOST_NAME}}
+          USER_NAME: ${{secrets.DEV_USER_NAME}}
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOST_NAME} '
+
+              # Now we have got the access of EC2 and we will start the deployment.
+              sh deploybe.sh
+              '
