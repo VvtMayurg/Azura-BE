@@ -19,7 +19,7 @@ class User(AbstractUser):
     first_name = models.CharField(_("First Name of User"), blank=True, max_length=255)
     last_name = models.CharField(_("Last Name of User"), blank=True, max_length=255)
     email = models.EmailField(_("email address"), unique=True)
-    picture = models.ImageField(null=True, blank=True)
+    picture = models.ImageField(upload_to="users/", null=True, blank=True)
     timezone = TimeZoneField(null=True, blank=True)
     email_noftification = models.BooleanField(default=True)
     sms_notification = models.BooleanField(default=True)

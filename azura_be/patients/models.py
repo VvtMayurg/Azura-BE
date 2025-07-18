@@ -29,4 +29,4 @@ class Patient(BaseModel):
     primary_provider = models.ForeignKey(User, on_delete=models.PROTECT, related_name="patients_primary_provider")
     active = models.BooleanField(default=True)
     address = models.JSONField(null=True, blank=True)
-    picture = models.ImageField(null=True, blank=True)
+    picture = models.ImageField(upload_to="patients/", null=True, blank=True)

@@ -6,6 +6,11 @@ from azura_be.provider_groups.apis.serializers import ProviderGroupRelatedSerial
 from azura_be.users.apis.serializers import UserRelatedSerializer
 
 
+class PatientRelatedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ("id", "first_name", "last_name", "email", "phone")
+
 class PatientCreateSerializer(serializers.ModelSerializer):
     address = AddressSerializer(required=False)
     picture = Base64FileField(file_types=["jpg", "jpeg", "png", "svg"], max_file_size=5, required=False, write_only=True)

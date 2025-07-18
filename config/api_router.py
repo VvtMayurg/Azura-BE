@@ -8,11 +8,13 @@ from azura_be.provider_groups.apis.views import DepartmentViewSet, ProviderGroup
 from azura_be.users.apis.views import UserViewSet, BusinessAccountSignUpViewSet
 from azura_be.business_accounts.apis.views import AccountConfigurationViseSet
 from azura_be.patients.apis.views import PatientViewSet
+from azura_be.educations.apis.views import EducationViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
 router.register("patients", PatientViewSet)
+router.register("educations", EducationViewSet)
 router.register("auth", BusinessAccountSignUpViewSet)
 router.register("specialties", SpecialtyViewSet)
 router.register("provider-groups", ProviderGroupViewSet)

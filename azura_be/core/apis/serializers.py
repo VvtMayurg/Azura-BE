@@ -33,10 +33,16 @@ class ICDCodeGetSerializer(serializers.ModelSerializer):
         model = ICDCode
         fields = "__all__"
 
+class ConditionRelatedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Condition
+        fields = ("id", "name")
+
 class ConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Condition
         fields = ("name", "description", "icd_codes", "ccm", "pcm", "rpm", "bhi")
+
 
 class ConditionGetSerializer(serializers.ModelSerializer):
     icd_codes = ICDCodeGetSerializer(many=True, required=False)

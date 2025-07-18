@@ -92,3 +92,9 @@ class DayChoices(models.TextChoices):
     FRD = "Friday"
     STD = "Saturday"
     SND = "Sunday"
+
+class EducationFormTypeChoices(models.TextChoices):
+    USER = "User"
+    PATIENT = "Patient"
+    ALL = "All"
+
