@@ -95,6 +95,7 @@ THIRD_PARTY_APPS = [
     "django_tenants",
     "dj_rest_auth",
     "rest_framework_simplejwt.token_blacklist",
+    "djstripe",
 ]
 
 LOCAL_SHARED_APPS = [
@@ -423,3 +424,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://api.stage.azuraemr.com",
     "https://api.azuraemr.com",
 ]
+
+
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+DJSTRIPE_WEBHOOK_SECRET = env("DJSTRIPE_WEBHOOK_SECRET", default="")
+STRIPE_TEST_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY", default="")
+STRIPE_TEST_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default="")
+STRIPE_LIVE_PUBLIC_KEY = env("STRIPE_LIVE_PUBLIC_KEY", default="")
+STRIPE_LIVE_SECRET_KEY = env("STRIPE_LIVE_SECRET_KEY", default="")
+DJSTRIPE_USE_NATIVE_JSONFIELD = True

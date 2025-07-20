@@ -35,3 +35,4 @@ django-timezone-field==7.1  # https://github.com/mfogel/django-timezone-field/
 django-filter==25.1  # https://github.com/carltongibson/django-filter
 tablib[all]==3.8.0  # https://github.com/jazzband/tablib
 django-admin-interface==0.30.1  # https://github.com/fabiocaccamo/django-admin-interface
+dj-stripe==2.9.1  # https://github.com/dj-stripe/dj-stripe
