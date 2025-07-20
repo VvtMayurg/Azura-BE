@@ -9,10 +9,18 @@ from azura_be.users.apis.views import UserViewSet, BusinessAccountSignUpViewSet
 from azura_be.business_accounts.apis.views import AccountConfigurationViseSet
 from azura_be.patients.apis.views import PatientViewSet
 from azura_be.educations.apis.views import EducationViewSet
+from azura_be.plans.apis.views import FormViewSet, PlanViewSet
+from azura_be.core.apis.views import FrequencyViewSet, CategoryViewSet, TagViewSet, FlagViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register("forms", FormViewSet)
+router.register("plans", PlanViewSet)
+router.register("frequencies", FrequencyViewSet)
+router.register("categories", CategoryViewSet)
+router.register("tags", TagViewSet)
+router.register("flags", FlagViewSet)
 router.register("patients", PatientViewSet)
 router.register("educations", EducationViewSet)
 router.register("auth", BusinessAccountSignUpViewSet)

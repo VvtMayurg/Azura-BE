@@ -1,6 +1,28 @@
 from rest_framework import serializers
 
 from azura_be.core.models import Specialty, ICDCode, Condition, CPTCode, HCPCSCode, RxCode, LoincCode
+from azura_be.core.models import Frequency, Category, Tag, Flag
+
+
+class FrequencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Frequency
+        fields = ("id", "name")
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ("id", "name")
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ("id", "name")
+
+class FlagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flag
+        fields = ("id", "name")
 
 
 class SpecialtyRelatedSerializer(serializers.ModelSerializer):

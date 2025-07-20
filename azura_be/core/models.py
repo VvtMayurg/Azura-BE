@@ -2,6 +2,26 @@ from django.db import models
 
 from azura_be.base.models import BaseModel
 
+class Frequency(BaseModel):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True)
+    active = models.BooleanField(default=True)
+
+class Category(BaseModel):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True)
+    active = models.BooleanField(default=True)
+
+class Flag(BaseModel):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True)
+    active = models.BooleanField(default=True)
+
+class Tag(BaseModel):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True)
+    active = models.BooleanField(default=True)
+
 
 class Specialty(BaseModel):
     name = models.CharField(max_length=255, unique=True)

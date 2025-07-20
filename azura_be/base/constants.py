@@ -98,3 +98,8 @@ class EducationFormTypeChoices(models.TextChoices):
     PATIENT = "Patient"
     ALL = "All"
 
+class ProgramChoices(models.TextChoices):
+    CCM = "CCM"
+    PCM = "PCM"
+    BHI = "BHI"
+    RPM = "RPM"

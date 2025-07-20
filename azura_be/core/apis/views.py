@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
@@ -6,8 +6,26 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
 from azura_be.base.filterset_classes import SpecialtyFilter
-from azura_be.core.apis.serializers import SpecialtyGetSerializer, SpecialtyPostSerializer, ICDCodeGetSerializer, ICDCodeSerializer, ConditionGetSerializer, ConditionSerializer, CPTCodeGetSerializer, CPTCodeSerializer, HCPCSCodeGetSerializer, HCPCSCodeSerializer, RxCodeGetSerializer, RxCodeSerializer, LoincCodeGetSerializer, LoincCodeSerializer
-from azura_be.core.models import Specialty, ICDCode, Condition, CPTCode, HCPCSCode, RxCode, LoincCode
+from azura_be.core.apis.serializers import CategorySerializer, FlagSerializer, FrequencySerializer, SpecialtyGetSerializer, SpecialtyPostSerializer, ICDCodeGetSerializer, ICDCodeSerializer, ConditionGetSerializer, ConditionSerializer, CPTCodeGetSerializer, CPTCodeSerializer, HCPCSCodeGetSerializer, HCPCSCodeSerializer, RxCodeGetSerializer, RxCodeSerializer, LoincCodeGetSerializer, LoincCodeSerializer, TagSerializer
+from azura_be.core.models import Specialty, ICDCode, Condition, CPTCode, HCPCSCode, RxCode, LoincCode, Frequency, Category, Tag, Flag
+
+
+class FrequencyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Frequency.objects.all()
+    serializer_class = FrequencySerializer
+
+class CategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class TagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+class FlagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Flag.objects.all()
+    serializer_class = FlagSerializer
+
 
 
 class SpecialtyViewSet(viewsets.ModelViewSet):
