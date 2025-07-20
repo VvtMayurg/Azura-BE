@@ -103,3 +103,22 @@ class ProgramChoices(models.TextChoices):
     PCM = "PCM"
     BHI = "BHI"
     RPM = "RPM"
+
+
+class TaskPriorityChoices(models.TextChoices):
+    HIGH = "High"
+    LOW = "Low"
+    MEDIUM = "Medium"
+
+class AppointmentTypeChoices(models.TextChoices):
+    FOLLOW_UP = "Follow-Up"
+    NEW = "New"
+    
+class AppointmentVisitTypeChoices(models.TextChoices):
+    IN_PERSON = "In Person"
+    VIRTUAL = "Virtual"
+
+class AppointmentStatusChoices(models.TextChoices):
+    PENDING = "Pending"
+    IN_PROGRESS = "In Progress"
+    COMPLETED = "Completed"
