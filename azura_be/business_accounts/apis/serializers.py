@@ -1,6 +1,7 @@
 from allauth.account.adapter import get_adapter
 from rest_framework import serializers
 from allauth.account.utils import setup_user_email
+from django.core.exceptions import ValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 from azura_be.business_accounts.models import BusinessAccount, CommunicationTemplate, CommunicationTemplateVersion, EmailConfiguration, SMSConfiguration
@@ -59,14 +60,23 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
                     detail=serializers.as_serializer_error(exc)
                 )
         user.save()
-        self.custom_signup(request, user)
+        # self.custom_signup(request, user)
         setup_user_email(request, user, [])
         return user
 
     def create(self, validated_data):
         user = self.save_user(self.context.get("request"))
         validated_data.update({"created_by": user})
-        return super().create(validated_data)
+        validated_data.pop("user_email", "")
+        validated_data.pop("first_name", "")
+        validated_data.pop("last_name", "")
+        validated_data.pop("password1", "")
+        validated_data.pop("password2", "")
+        validated_data.pop("validate_only", False)
+        try:
+            return super().create(validated_data)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
 
 
 class EmailConfigurationSerializer(serializers.ModelSerializer):

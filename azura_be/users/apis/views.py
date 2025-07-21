@@ -106,6 +106,8 @@ class CustomLogoutView(LogoutView):
 class BusinessAccountSignUpViewSet(viewsets.GenericViewSet):
     queryset = BusinessAccount.objects.all()
     serializer_class = BusinessAccountSignUpSerializer
+    authentication_classes = []
+    permission_classes = []
 
     @action(detail=False, methods=["POST"], url_path="signup")
     def signup(self, request):

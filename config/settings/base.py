@@ -102,6 +102,7 @@ LOCAL_SHARED_APPS = [
     "azura_be.core",
     "azura_be.users",
     "azura_be.business_accounts",
+    "azura_be.billings",
 ]
 
 TENANT_APPS = [

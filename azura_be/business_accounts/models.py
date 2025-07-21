@@ -2,12 +2,26 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django_tenants.models import TenantMixin
+from django.core.validators import RegexValidator
 
 from azura_be.base.constants import CommunicationTemplateTypeChoices, CommunicationTemplateUserTypeChoices, DisciplineChoices, EmailConfigurationProtocolChoices, SMSConfigurationProviderChoices
 from azura_be.base.models import BaseModel
 
 
-class BusinessAccount(BaseModel, TenantMixin):
+domain_validator = RegexValidator(
+    regex=r'^((localhost|\d{1,3}(\.\d{1,3}){3}|([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))(:\d{1,5})?$',
+    message="Enter a valid domain, e.g., example.com"
+)
+
+
+class EnabledDomain(BaseModel):
+    domain = models.CharField(validators=[domain_validator], unique=True)
+
+    def __str__(self):
+        return self.domain
+
+
+class BusinessAccount(TenantMixin, BaseModel):
     name = models.CharField(max_length=255, unique=True)
     discipline_service = models.CharField(max_length=60, choices=DisciplineChoices)
     address = models.JSONField()
@@ -24,17 +38,28 @@ class BusinessAccount(BaseModel, TenantMixin):
     email = models.EmailField(unique=True)
     website = models.URLField(unique=True)
     grace_code = models.CharField(max_length=255)
-    web_address = models.URLField(unique=True, null=True)
+    web_address = models.CharField(null=True, blank=True, validators=[domain_validator])
 
-    auto_create_schema = True
+    auto_create_schema = False
 
     def save(self, *args, **kwargs):
         if not self.schema_name:
             self.set_schema_name()
+        if self.web_address:
+            self.web_address = self.web_address.lower()
+            self.validate_web_address()
         return super().save(*args, **kwargs)
 
     def set_schema_name(self):
         self.schema_name = str(self.id).replace("-", "_")
+
+    def validate_web_address(self):
+        if EnabledDomain.objects.filter(domain=self.web_address).exists():
+            raise ValidationError(message={"web_address": "Please choose a correct we address"})
+        for enabled_domain in EnabledDomain.objects.all():
+            if self.web_address.endswith(enabled_domain.domain):
+                return True
+        raise ValidationError(message={"web_address": "Please choose a correct we address"})
 
 
 class EmailConfiguration(BaseModel):

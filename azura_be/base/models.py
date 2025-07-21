@@ -6,7 +6,7 @@ from azura_be.base.context import current_context
 
 
 class BaseModel(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
@@ -15,6 +15,7 @@ class BaseModel(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="%(app_label)s_%(class)s_created_by",
+        editable=False,
     )
     updated_by = models.ForeignKey(
         "users.User",
@@ -22,6 +23,7 @@ class BaseModel(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="%(app_label)s_%(class)s_updated_by",
+        editable=False,
     )
 
     class Meta:
