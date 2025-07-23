@@ -40,7 +40,7 @@ class BusinessAccount(TenantMixin, BaseModel):
     email = models.EmailField(unique=True)
     website = models.URLField(unique=True)
     grace_code = models.CharField(max_length=255)
-    web_address = models.CharField(null=True, blank=True, validators=[domain_validator])
+    web_address = models.CharField(null=True, unique=True, validators=[domain_validator])
     initial_completed = models.BooleanField(default=False)
 
     # Stripe Resources
