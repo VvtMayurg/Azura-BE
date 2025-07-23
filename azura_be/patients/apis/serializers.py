@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from timezone_field.rest_framework import TimeZoneSerializerField
 
 from azura_be.base.serializers import AddressSerializer, Base64FileField
 from azura_be.patients.models import Patient
@@ -22,6 +23,7 @@ class PatientCreateSerializer(serializers.ModelSerializer):
 class PatientGetSerializer(serializers.ModelSerializer):
     provider_group = ProviderGroupRelatedSerializer()
     primary_provider = UserRelatedSerializer()
+    timezone = TimeZoneSerializerField()
 
     class Meta:
         model = Patient

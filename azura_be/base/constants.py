@@ -122,3 +122,9 @@ class AppointmentStatusChoices(models.TextChoices):
     PENDING = "Pending"
     IN_PROGRESS = "In Progress"
     COMPLETED = "Completed"
+
+
+class CommunicationMessageType(models.TextChoices):
+    IN_APP = "In App"
+    EMAIL = "Email"
+    SMS_TEXT = "SMS/Text"

@@ -102,7 +102,9 @@ LOCAL_SHARED_APPS = [
     "azura_be.core",
     "azura_be.users",
     "azura_be.business_accounts",
+    "django_tenants",
     "azura_be.billings",
+    "azura_be.communications",
 ]
 
 TENANT_APPS = [
@@ -403,7 +405,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "USER_ID_FIELD": "uid",
-    "USER_ID_CLAIM": "user_id",
+    "USER_ID_CLAIM": "user_uid",
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
 }
@@ -436,3 +438,13 @@ STRIPE_TEST_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default="")
 STRIPE_LIVE_PUBLIC_KEY = env("STRIPE_LIVE_PUBLIC_KEY", default="")
 STRIPE_LIVE_SECRET_KEY = env("STRIPE_LIVE_SECRET_KEY", default="")
 DJSTRIPE_USE_NATIVE_JSONFIELD = True
+
+# Django Channels Configurations
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [env("REDIS_URL", default="redis")],
+        },
+    },
+}

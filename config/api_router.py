@@ -13,11 +13,14 @@ from azura_be.plans.apis.views import FormViewSet, PlanViewSet
 from azura_be.core.apis.views import FrequencyViewSet, CategoryViewSet, TagViewSet, FlagViewSet
 from azura_be.tasks.apis.views import TaskViewSet
 from azura_be.appointments.apis.views import AppointmentViewSet
+from azura_be.communications.apis.views import ThreadViewSet, CommunicationMessageViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
 router.register("appointments", AppointmentViewSet)
+router.register("threads", ThreadViewSet)
+router.register("communications", CommunicationMessageViewSet)
 router.register("tasks", TaskViewSet)
 router.register("forms", FormViewSet)
 router.register("plans", PlanViewSet)
