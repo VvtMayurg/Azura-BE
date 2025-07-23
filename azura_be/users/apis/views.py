@@ -1,6 +1,7 @@
 from dj_rest_auth.views import LogoutView
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
+from dj_rest_auth.utils import jwt_encode
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
@@ -11,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from azura_be.business_accounts.models import BusinessAccount
-from azura_be.business_accounts.apis.serializers import BusinessAccountSignUpSerializer
+from azura_be.business_accounts.apis.serializers import BusinessAccountSignUpSerializer, SignUpResponseSerializer
 from azura_be.users.apis.serializers import CustomLogoutSerializer, LicenseGetSerializer, LicenseSerializer, UserCreateSerializer, WorkScheduleGetSerializer, WorkScheduleSerializer
 from azura_be.users.apis.serializers import UserDetailSerializer
 from azura_be.users.models import License, User, WorkShedule
@@ -109,10 +110,21 @@ class BusinessAccountSignUpViewSet(viewsets.GenericViewSet):
     authentication_classes = []
     permission_classes = []
 
+    @extend_schema(responses=SignUpResponseSerializer)
     @action(detail=False, methods=["POST"], url_path="signup")
     def signup(self, request):
         serializer = BusinessAccountSignUpSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         if not serializer.validated_data.pop("validate_only", False):
-            serializer.save()
+            instance = serializer.save()
+            user = serializer.user
+            return self.generate_access_token(instance.id, user)
         return Response(serializer.data)
+
+
+    def generate_access_token(self, account_id, user):
+        access, _ = jwt_encode(user)
+        return Response({
+            "account_id": account_id,
+            "access": str(access),
+        })

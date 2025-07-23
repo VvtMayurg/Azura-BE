@@ -2,8 +2,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from azura_be.billings.setup_plans import create_card_intent, create_stripe_card_for_account, subscribe_plan_for_account
 from azura_be.business_accounts.models import BusinessAccount, EmailConfiguration, SMSConfiguration, CommunicationTemplate
-from azura_be.business_accounts.apis.serializers import EmailConfigurationSerializer, SMSConfigurationSerializer, CommunicationTemplateSerializer
+from azura_be.business_accounts.apis.serializers import CardIntentSerializer, EmailConfigurationSerializer, PlanSubscriptionSerializer, SMSConfigurationSerializer, CommunicationTemplateSerializer
 
 
 class AccountConfigurationViseSet(viewsets.GenericViewSet):
@@ -17,7 +18,31 @@ class AccountConfigurationViseSet(viewsets.GenericViewSet):
             return SMSConfigurationSerializer
         if self.action == "communication-templates":
             return CommunicationTemplateSerializer(many=True)
+        if self.action == "card_intent":
+            return CardIntentSerializer
         return super().get_serializer_class()
+
+    @action(detail=True, methods=["GET"], url_path="card-intent")
+    def card_intent(self, request, *args, **kwargs):
+        business_account = self.get_object()
+        if request.user.id != business_account.created_by:
+            return Response({"detail": "You do not have permission to perform this action"}, status=403)
+
+        setup_intent = create_card_intent(business_account.stripe_customer, business_account)
+        return Response({"client_secret": setup_intent.client_secret})
+
+    @action(detail=True, methods=["GET"], url_path="add-card")
+    def add_card(self, request, *args, **kwargs):
+        business_account = self.get_object()
+        serializer = PlanSubscriptionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        price = serializer.validated_data.get("price")
+        card_id = serializer.validated_data.get("card_id")
+        create_stripe_card_for_account(business_account, card_id)
+        subscribe_plan_for_account(business_account.stripe_customer, price, account)
+        return Response({"detail": "Plan subscribed successfully"})
+
 
     @action(detail=False, methods=["GET", "POST"], url_path="email-configuration")
     def email_configuration(self, request, *args, **kwargs):

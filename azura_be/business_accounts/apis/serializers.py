@@ -3,10 +3,20 @@ from rest_framework import serializers
 from allauth.account.utils import setup_user_email
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
+from djstripe.models import Price
 
 from azura_be.business_accounts.models import BusinessAccount, CommunicationTemplate, CommunicationTemplateVersion, EmailConfiguration, SMSConfiguration
 from azura_be.users.apis.serializers import UserRelatedSerializer
 from azura_be.users.models import User
+
+
+class CardIntentSerializer(serializers.Serializer):
+    client_secret = serializers.CharField()
+
+
+class PlanSubscriptionSerializer(serializers.Serializer):
+    price = serializers.PrimaryKeyRelatedField(queryset=Price.objects.all())
+    card_id = serializers.CharField()
 
 
 class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
@@ -65,8 +75,8 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
         return user
 
     def create(self, validated_data):
-        user = self.save_user(self.context.get("request"))
-        validated_data.update({"created_by": user})
+        self.user = self.save_user(self.context.get("request"))
+        validated_data.update({"created_by": self.user.id})
         validated_data.pop("user_email", "")
         validated_data.pop("first_name", "")
         validated_data.pop("last_name", "")
@@ -77,6 +87,10 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
             return super().create(validated_data)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
+
+class SignUpResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    account_id = serializers.UUIDField()
 
 
 class EmailConfigurationSerializer(serializers.ModelSerializer):

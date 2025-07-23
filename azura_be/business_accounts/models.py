@@ -3,9 +3,11 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django_tenants.models import TenantMixin
 from django.core.validators import RegexValidator
+from djstripe.models import Customer, Price, Card
 
 from azura_be.base.constants import CommunicationTemplateTypeChoices, CommunicationTemplateUserTypeChoices, DisciplineChoices, EmailConfigurationProtocolChoices, SMSConfigurationProviderChoices
 from azura_be.base.models import BaseModel
+from azura_be.billings.setup_plans import create_stripe_customer_for_account
 
 
 domain_validator = RegexValidator(
@@ -39,6 +41,17 @@ class BusinessAccount(TenantMixin, BaseModel):
     website = models.URLField(unique=True)
     grace_code = models.CharField(max_length=255)
     web_address = models.CharField(null=True, blank=True, validators=[domain_validator])
+    initial_completed = models.BooleanField(default=False)
+
+    # Stripe Resources
+    stripe_customer = models.OneToOneField(
+        Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='account'
+    )
+    stripe_price = models.ForeignKey(
+        Price, on_delete=models.SET_NULL, null=True, blank=True, related_name='accounts'
+    )
+    stripe_cards = models.ManyToManyField(Card, related_name='cards')
+    default_stripe_card = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, blank=True, related_name='default_account_cards')
 
     auto_create_schema = False
 
@@ -48,7 +61,14 @@ class BusinessAccount(TenantMixin, BaseModel):
         if self.web_address:
             self.web_address = self.web_address.lower()
             self.validate_web_address()
+        if self.initial_completed:
+            self.auto_create_schema = True
+        if self.stripe_customer is None:
+            self.create_stripe_user()
         return super().save(*args, **kwargs)
+
+    def create_stripe_user(self):
+        create_stripe_customer_for_account(self, self.email)
 
     def set_schema_name(self):
         self.schema_name = str(self.id).replace("-", "_")

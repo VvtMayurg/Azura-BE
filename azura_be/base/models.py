@@ -9,20 +9,14 @@ class BaseModel(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(
-        "users.User",
+    created_by = models.PositiveBigIntegerField(
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name="%(app_label)s_%(class)s_created_by",
         editable=False,
     )
-    updated_by = models.ForeignKey(
-        "users.User",
+    updated_by = models.PositiveBigIntegerField(
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name="%(app_label)s_%(class)s_updated_by",
         editable=False,
     )
 
