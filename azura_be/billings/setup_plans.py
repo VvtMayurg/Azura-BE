@@ -1,12 +1,13 @@
 import stripe
-from django.core.management import call_command
 from django.conf import settings
-from djstripe.models import Customer, Card
+from django.core.management import call_command
+from djstripe.models import Card
+from djstripe.models import Customer
 
 stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
-def create_plan_method():
 
+def create_plan_method():
     # Create Product
     starter_product = stripe.Product.create(name="Lite Plan")
     pro_product = stripe.Product.create(name="Premium Plan")
@@ -49,14 +50,16 @@ def create_plan_method():
 
 def create_card_intent(customer, account):
     return stripe.SetupIntent.create(
-            customer=customer.id,
-            payment_method_types=["card"],
-            metadata={"account_id": account.id},
-        )
+        customer=customer.id,
+        payment_method_types=["card"],
+        metadata={"account_id": account.id},
+    )
 
 
 def create_stripe_customer_for_account(account, email):
-    stripe_customer = stripe.Customer.create(email=email, metadata={"account_id": account.id})
+    stripe_customer = stripe.Customer.create(
+        email=email, metadata={"account_id": account.id}
+    )
     djstripe_customer = Customer.sync_from_stripe_data(stripe_customer)
 
     account.stripe_customer = djstripe_customer
@@ -73,6 +76,7 @@ def create_stripe_card_for_account(account, card_id):
     account.default_stripe_card = djstripe_card
     if djstripe_card in account.stripe_cards.all():
         account.stripe_cards.remove(djstripe_card)
+
 
 def subscribe_plan_for_account(customer: Customer, price, account):
     customer.subscribe(items=[{"price": price}])

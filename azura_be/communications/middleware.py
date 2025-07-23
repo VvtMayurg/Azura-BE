@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from django.db import close_old_connections
 from rest_framework_simplejwt.settings import api_settings
 
-
 User = get_user_model()
 
 
@@ -16,7 +15,7 @@ def get_user(token):
     for AuthToken in api_settings.AUTH_TOKEN_CLASSES:
         validated_token = AuthToken(token)
     if not validated_token:
-        return
+        return None
     return User.objects.filter(uid=validated_token["user_uid"]).first()
 
 

@@ -47,9 +47,13 @@ class ThreadChatConsumer(AsyncJsonWebsocketConsumer):
     @sync_to_async
     def get_thread(self):
         thread_id = self.scope["url_route"]["kwargs"]["thread_id"]
-        self.thread = Thread.objects.filter(Q(created_by=self.user) | Q(thread_users__user=self.user)).get(id=thread_id)
+        self.thread = Thread.objects.filter(
+            Q(created_by=self.user) | Q(thread_users__user=self.user)
+        ).get(id=thread_id)
         self.messages = ThreadMessageSerializer(
-            ThreadMessage.objects.select_related("user").prefetch_related("thread_message_attachments").filter(thread=self.thread)[:25],
+            ThreadMessage.objects.select_related("user")
+            .prefetch_related("thread_message_attachments")
+            .filter(thread=self.thread)[:25],
             many=True,
         ).data
 
@@ -59,16 +63,31 @@ class ThreadChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
         if not text_data and not bytes_data:
-            return await self.send_json({"type": "receive", "message": "No Data Received"})
+            return await self.send_json(
+                {"type": "receive", "message": "No Data Received"}
+            )
         if bytes_data:
-            return await self.send_json({"type": "receive", "message": "Bytes Data Received"})
+            return await self.send_json(
+                {"type": "receive", "message": "Bytes Data Received"}
+            )
 
         data = await self.decode_json(text_data)
         if data.get("type") == "new_message":
             message = data.get("message")
-            return await self.send_json({"type": "new_message", "message": ThreadMessageSerializer(await self.save_new_message(message)).data})
-        return await self.send_json({"type": "receive", "message": "Text Data Received"})
+            return await self.send_json(
+                {
+                    "type": "new_message",
+                    "message": ThreadMessageSerializer(
+                        await self.save_new_message(message)
+                    ).data,
+                }
+            )
+        return await self.send_json(
+            {"type": "receive", "message": "Text Data Received"}
+        )
 
     @sync_to_async
     def save_new_message(self, content):
-        return ThreadMessage.objects.create(thread=self.thread, user=self.user, content=content)
+        return ThreadMessage.objects.create(
+            thread=self.thread, user=self.user, content=content
+        )

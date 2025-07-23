@@ -1,8 +1,9 @@
-from django.db import models
 from django.core.validators import RegexValidator
+from django.db import models
 from timezone_field.fields import TimeZoneField
 
-from azura_be.base.constants import DayChoices, ProviderGroupLocationStatusChoices
+from azura_be.base.constants import DayChoices
+from azura_be.base.constants import ProviderGroupLocationStatusChoices
 from azura_be.base.models import BaseModel
 from azura_be.core.models import Specialty
 from azura_be.provider_groups.models import ProviderGroup
@@ -10,7 +11,9 @@ from azura_be.provider_groups.models import ProviderGroup
 
 class Location(BaseModel):
     name = models.CharField(max_length=255)
-    provider_group = models.ForeignKey(ProviderGroup, on_delete=models.PROTECT, related_name="locations")
+    provider_group = models.ForeignKey(
+        ProviderGroup, on_delete=models.PROTECT, related_name="locations"
+    )
     email = models.EmailField(blank=True)
     phone = models.CharField(
         max_length=15,
@@ -19,7 +22,7 @@ class Location(BaseModel):
                 regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
                 message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
                 code="invalid_phone",
-            )
+            ),
         ],
         blank=True,
     )
@@ -49,7 +52,9 @@ class Location(BaseModel):
 
 class LocationWorkingHour(BaseModel):
     location = models.ForeignKey(
-        Location, on_delete=models.CASCADE, related_name="working_hours"
+        Location,
+        on_delete=models.CASCADE,
+        related_name="working_hours",
     )
     day = models.CharField(max_length=10, choices=DayChoices)
     start_at = models.DateTimeField()

@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import RegexValidator
+from django.db import models
 from timezone_field.fields import TimeZoneField
 
 from azura_be.base.constants import ProviderGroupLocationStatusChoices
@@ -28,7 +28,7 @@ class ProviderGroup(BaseModel):
                 regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
                 message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
                 code="invalid_phone",
-            )
+            ),
         ],
         blank=True,
     )
@@ -53,7 +53,9 @@ class Department(BaseModel):
     code = models.CharField(max_length=50, null=True, unique=True)
     description = models.TextField(blank=True)
     admin = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="department_admins"
+        User,
+        on_delete=models.PROTECT,
+        related_name="department_admins",
     )
     provider_groups = models.ManyToManyField(ProviderGroup, related_name="departments")
     locations = models.ManyToManyField("locations.Location", related_name="departments")
@@ -64,7 +66,7 @@ class Department(BaseModel):
                 regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
                 message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
                 code="invalid_phone",
-            )
+            ),
         ],
         blank=True,
     )

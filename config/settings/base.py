@@ -92,7 +92,6 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
-    "django_tenants",
     "dj_rest_auth",
     "rest_framework_simplejwt.token_blacklist",
     "djstripe",

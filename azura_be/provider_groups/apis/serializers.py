@@ -1,19 +1,28 @@
 from rest_framework import serializers
 from timezone_field.rest_framework import TimeZoneSerializerField
 
-from azura_be.base.serializers import AddressSerializer, Base64FileField
+from azura_be.base.serializers import AddressSerializer
+from azura_be.base.serializers import Base64FileField
 from azura_be.locations.apis.serializers import LocationRelatedSerializer
-from azura_be.provider_groups.models import ProviderGroup, Department
+from azura_be.provider_groups.models import Department
+from azura_be.provider_groups.models import ProviderGroup
 from azura_be.users.apis.serializers import UserRelatedSerializer
+
 
 class ProviderGroupRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProviderGroup
         fields = ("id", "name", "email")
 
+
 class ProviderGroupPostSerializer(serializers.ModelSerializer):
     timezone = TimeZoneSerializerField()
-    picture = Base64FileField(file_types=["jpg", "jpeg", "png", "svg"], max_file_size=5, required=False, write_only=True)
+    picture = Base64FileField(
+        file_types=["jpg", "jpeg", "png", "svg"],
+        max_file_size=5,
+        required=False,
+        write_only=True,
+    )
     billing_address = AddressSerializer(required=False)
     physical_address = AddressSerializer(required=False)
 
@@ -31,6 +40,7 @@ class ProviderGroupPostSerializer(serializers.ModelSerializer):
             "bio",
             "timezone",
         )
+
 
 class ProviderGroupSerializer(serializers.ModelSerializer):
     timezone = TimeZoneSerializerField()
@@ -55,10 +65,12 @@ class ProviderGroupSerializer(serializers.ModelSerializer):
             "timezone",
         )
 
+
 class DepartmentRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ("id", "name",)
+        fields = ("id", "name")
+
 
 class DepartmentPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,4 +85,14 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Department
-        fields = ("id", "created_at", "updated_at", "name", "admin", "phone", "active", "locations", "provider_groups")
+        fields = (
+            "id",
+            "created_at",
+            "updated_at",
+            "name",
+            "admin",
+            "phone",
+            "active",
+            "locations",
+            "provider_groups",
+        )

@@ -1,10 +1,12 @@
 from django.db import models
 
+
 class ProviderGroupLocationStatusChoices(models.TextChoices):
     ACTIVE = "Active"
     INACTIVE = "Inactive"
     PENDING = "Pending"
     SUSPENDED = "Suspended"
+
 
 class DisciplineChoices(models.TextChoices):
     ACUPUNCTURE = "Acupuncture"
@@ -58,12 +60,15 @@ class DisciplineChoices(models.TextChoices):
     YOGA = "Yoga"
     UNKNOWN = "I can't find my discipline"
 
+
 class EmailConfigurationProtocolChoices(models.TextChoices):
     TLS = "TLS"
     SSL = "SSL"
 
+
 class SMSConfigurationProviderChoices(models.TextChoices):
     TWILLIO = "Twillio"
+
 
 class CommunicationTemplateTypeChoices(models.TextChoices):
     SMS = "SMS"
@@ -93,10 +98,12 @@ class DayChoices(models.TextChoices):
     STD = "Saturday"
     SND = "Sunday"
 
+
 class EducationFormTypeChoices(models.TextChoices):
     USER = "User"
     PATIENT = "Patient"
     ALL = "All"
+
 
 class ProgramChoices(models.TextChoices):
     CCM = "CCM"
@@ -110,13 +117,16 @@ class TaskPriorityChoices(models.TextChoices):
     LOW = "Low"
     MEDIUM = "Medium"
 
+
 class AppointmentTypeChoices(models.TextChoices):
     FOLLOW_UP = "Follow-Up"
     NEW = "New"
-    
+
+
 class AppointmentVisitTypeChoices(models.TextChoices):
     IN_PERSON = "In Person"
     VIRTUAL = "Virtual"
+
 
 class AppointmentStatusChoices(models.TextChoices):
     PENDING = "Pending"

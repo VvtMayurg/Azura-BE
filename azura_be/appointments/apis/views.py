@@ -1,7 +1,10 @@
 from rest_framework import viewsets
 
+from azura_be.appointments.apis.serializers import AppointmentCreateSerializer
+from azura_be.appointments.apis.serializers import AppointmentSerializer
+from azura_be.appointments.apis.serializers import AppointmentUpdateSerializer
 from azura_be.appointments.models import Appointment
-from azura_be.appointments.apis.serializers import AppointmentCreateSerializer, AppointmentSerializer, AppointmentUpdateSerializer
+
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "patch", "post", "delete"]

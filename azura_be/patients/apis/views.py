@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 
+from azura_be.patients.apis.serializers import PatientCreateSerializer
+from azura_be.patients.apis.serializers import PatientGetSerializer
 from azura_be.patients.models import Patient
-from azura_be.patients.apis.serializers import PatientGetSerializer, PatientCreateSerializer
 
 
 class PatientViewSet(viewsets.ModelViewSet):

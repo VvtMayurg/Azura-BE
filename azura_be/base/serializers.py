@@ -48,13 +48,19 @@ class Base64FileField(serializers.FileField):
 
     def get_file_extension(self, encoded_data):
         frmt, data = encoded_data.split(";base64,")
-        if frmt == "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        if (
+            frmt
+            == "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ):
             frmt = "xlsx"
         if frmt == "data:application/vnd.ms-excel":
             frmt = "xls"
         if frmt == "data:application/vnd.ms-powerpoint":
             frmt = "ppt"
-        if frmt == "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        if (
+            frmt
+            == "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ):
             frmt = "docx"
         if frmt == "data:application/octet-stream":
             frmt = "txt"

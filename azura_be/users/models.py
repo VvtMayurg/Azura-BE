@@ -2,13 +2,13 @@ import uuid
 from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
-from django.db import models
-from azura_be.base.constants import DayChoices
-from timezone_field.fields import TimeZoneField
-from django.core.validators import RegexValidator
-from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import RegexValidator
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from timezone_field.fields import TimeZoneField
 
+from azura_be.base.constants import DayChoices
 from azura_be.base.models import BaseModel
 from azura_be.core.models import Specialty
 from azura_be.users.managers import UserManager
@@ -35,7 +35,7 @@ class User(AbstractUser):
                 regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
                 message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
                 code="invalid_phone",
-            )
+            ),
         ],
         blank=True,
     )
@@ -61,7 +61,9 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
         related_name="%(app_label)s_%(class)s_updated_by",
     )
-    business_accounts = models.ManyToManyField("business_accounts.BusinessAccount", blank=True)
+    business_accounts = models.ManyToManyField(
+        "business_accounts.BusinessAccount", blank=True
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

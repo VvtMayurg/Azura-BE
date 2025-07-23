@@ -1,7 +1,11 @@
 from rest_framework import viewsets
 
-from azura_be.plans.models import Form, Plan
-from azura_be.plans.apis.serializers import FormCreateSerializer, FormSerializer, PlanCreateSerializer, PlanSerializer
+from azura_be.plans.apis.serializers import FormCreateSerializer
+from azura_be.plans.apis.serializers import FormSerializer
+from azura_be.plans.apis.serializers import PlanCreateSerializer
+from azura_be.plans.apis.serializers import PlanSerializer
+from azura_be.plans.models import Form
+from azura_be.plans.models import Plan
 
 
 class FormViewSet(viewsets.ModelViewSet):

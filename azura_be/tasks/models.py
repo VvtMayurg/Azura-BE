@@ -17,7 +17,6 @@ class Task(BaseModel):
     completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True, blank=True)
 
-
     def save(self, *args, **kwargs):
         if self.completed and not self.completed_at:
             self.completed_at = timezone.now()

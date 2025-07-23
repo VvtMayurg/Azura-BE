@@ -1,8 +1,10 @@
-from django_filters.filterset import FilterSet
 from django.db.models import Q
-from django_filters.filters import CharFilter, BooleanFilter
+from django_filters.filters import BooleanFilter
+from django_filters.filters import CharFilter
+from django_filters.filterset import FilterSet
 
 from azura_be.core.models import Specialty
+
 
 class SpecialtyFilter(FilterSet):
     search = CharFilter(method="filter_by_search")
@@ -26,4 +28,3 @@ class SpecialtyFilter(FilterSet):
     class Meta:
         model = Specialty
         fields = ["search", "name", "description", "active"]
-

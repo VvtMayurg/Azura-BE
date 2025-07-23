@@ -1,11 +1,15 @@
 from allauth.account.adapter import get_adapter
-from rest_framework import serializers
 from allauth.account.utils import setup_user_email
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 from djstripe.models import Price
+from rest_framework import serializers
 
-from azura_be.business_accounts.models import BusinessAccount, CommunicationTemplate, CommunicationTemplateVersion, EmailConfiguration, SMSConfiguration
+from azura_be.business_accounts.models import BusinessAccount
+from azura_be.business_accounts.models import CommunicationTemplate
+from azura_be.business_accounts.models import CommunicationTemplateVersion
+from azura_be.business_accounts.models import EmailConfiguration
+from azura_be.business_accounts.models import SMSConfiguration
 from azura_be.users.apis.serializers import UserRelatedSerializer
 from azura_be.users.models import User
 
@@ -29,14 +33,32 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BusinessAccount
-        fields = ("name", "discipline_service", "address", "contact", "email", "website", "grace_code", "web_address", "user_email", "first_name", "last_name", "password1", "password2", "validate_only")
-        extra_kwargs = {"password1": {"write_only": True}, "password1": {"write_only": True}}
+        fields = (
+            "name",
+            "discipline_service",
+            "address",
+            "contact",
+            "email",
+            "website",
+            "grace_code",
+            "web_address",
+            "user_email",
+            "first_name",
+            "last_name",
+            "password1",
+            "password2",
+            "validate_only",
+        )
+        extra_kwargs = {
+            "password1": {"write_only": True},
+            "password1": {"write_only": True},
+        }
 
     def validate_user_email(self, email):
         email = get_adapter().clean_email(email.lower())
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError(
-                detail="User with this email already exists"
+                detail="User with this email already exists",
             )
         return email
 
@@ -45,16 +67,21 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
 
     def get_cleaned_data(self):
         return {
-            'email': self.validated_data.pop('user_email', ''),
-            'first_name': self.validated_data.pop('first_name', ''),
-            'last_name': self.validated_data.pop('last_name', ''),
-            'password1': self.validated_data.pop('password1', ''),
+            "email": self.validated_data.pop("user_email", ""),
+            "first_name": self.validated_data.pop("first_name", ""),
+            "last_name": self.validated_data.pop("last_name", ""),
+            "password1": self.validated_data.pop("password1", ""),
         }
-    
+
     def validate(self, attrs):
         attrs = super().validate(attrs)
         if attrs.get("password1") != attrs.get("password2"):
-            raise serializers.ValidationError(detail={"password1": "Password and Confirm Password should be same", "password2": "Password and Confirm Password should be same"})
+            raise serializers.ValidationError(
+                detail={
+                    "password1": "Password and Confirm Password should be same",
+                    "password2": "Password and Confirm Password should be same",
+                }
+            )
         return attrs
 
     def save_user(self, request):
@@ -64,10 +91,10 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
         user = adapter.save_user(request, user, self, commit=False)
         if "password1" in self.cleaned_data:
             try:
-                adapter.clean_password(self.cleaned_data['password1'], user=user)
+                adapter.clean_password(self.cleaned_data["password1"], user=user)
             except DjangoValidationError as exc:
                 raise serializers.ValidationError(
-                    detail=serializers.as_serializer_error(exc)
+                    detail=serializers.as_serializer_error(exc),
                 )
         user.save()
         # self.custom_signup(request, user)
@@ -88,6 +115,7 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
 
+
 class SignUpResponseSerializer(serializers.Serializer):
     access = serializers.CharField()
     account_id = serializers.UUIDField()
@@ -96,8 +124,17 @@ class SignUpResponseSerializer(serializers.Serializer):
 class EmailConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailConfiguration
-        fields = ("host", "port", "username", "password", "from_email", "protocol", "authentication")
+        fields = (
+            "host",
+            "port",
+            "username",
+            "password",
+            "from_email",
+            "protocol",
+            "authentication",
+        )
         extra_kwargs = {"password": {"write_only": True}}
+
 
 class SMSConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,14 +142,33 @@ class SMSConfigurationSerializer(serializers.ModelSerializer):
         fields = ("provider", "from_number", "cred_json")
         extra_kwargs = {"cred_json": {"write_only": True}}
 
+
 class CommunicationTemplateSerializer(serializers.ModelSerializer):
     created_by = UserRelatedSerializer(required=False)
     updated_by = UserRelatedSerializer(required=False)
 
     class Meta:
         model = CommunicationTemplate
-        fields = ("id", "created_at", "updated_at", "created_by", "updated_by", "name", "type", "user_type", "subject", "content", "active")
-        read_only_fields = ("id", "created_at", "updated_at", "created_by", "updated_by")
+        fields = (
+            "id",
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "name",
+            "type",
+            "user_type",
+            "subject",
+            "content",
+            "active",
+        )
+        read_only_fields = (
+            "id",
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+        )
 
     def update(self, instance, validated_data):
         old_content = instance.content
@@ -122,4 +178,10 @@ class CommunicationTemplateSerializer(serializers.ModelSerializer):
         new_subject = instance.subject
 
         if old_content != new_content or old_subject != new_subject:
-            CommunicationTemplateVersion.objects.create(template=instance, old_content=old_content, old_subject=old_subject, new_content=new_content, new_subject=new_subject)
+            CommunicationTemplateVersion.objects.create(
+                template=instance,
+                old_content=old_content,
+                old_subject=old_subject,
+                new_content=new_content,
+                new_subject=new_subject,
+            )

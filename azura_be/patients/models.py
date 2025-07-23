@@ -1,12 +1,12 @@
-from django.db import models
 from django.core.validators import RegexValidator
-from azura_be.locations.models import Location
-from azura_be.users.models import User
+from django.db import models
 from timezone_field.fields import TimeZoneField
 
 from azura_be.base.constants import GenderChoices
 from azura_be.base.models import BaseModel
+from azura_be.locations.models import Location
 from azura_be.provider_groups.models import ProviderGroup
+from azura_be.users.models import User
 
 
 class Patient(BaseModel):
@@ -16,7 +16,9 @@ class Patient(BaseModel):
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=25, choices=GenderChoices)
     mrn = models.CharField(max_length=50, blank=True)
-    provider_group = models.ForeignKey(ProviderGroup, on_delete=models.PROTECT, related_name="patients")
+    provider_group = models.ForeignKey(
+        ProviderGroup, on_delete=models.PROTECT, related_name="patients"
+    )
     email = models.EmailField(blank=True)
     phone_type = models.CharField(max_length=50, blank=True)
     phone = models.CharField(
@@ -26,22 +28,33 @@ class Patient(BaseModel):
                 regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
                 message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
                 code="invalid_phone",
-            )
+            ),
         ],
         blank=True,
     )
-    primary_provider = models.ForeignKey(User, on_delete=models.PROTECT, related_name="patients_primary_provider")
+    primary_provider = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="patients_primary_provider"
+    )
     referring_provider = models.CharField(max_length=255, blank=True)
     active = models.BooleanField(default=True)
     address = models.JSONField(null=True, blank=True)
     picture = models.ImageField(upload_to="patients/", null=True, blank=True)
     timezone = TimeZoneField(null=True, blank=True)
-    preferred_location = models.ForeignKey(Location, on_delete=models.PROTECT, related_name="patients", null=True, blank=True)
+    preferred_location = models.ForeignKey(
+        Location,
+        on_delete=models.PROTECT,
+        related_name="patients",
+        null=True,
+        blank=True,
+    )
     contact_preferences = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
 
+
 class Insurance(BaseModel):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="insurances")
+    patient = models.ForeignKey(
+        Patient, on_delete=models.CASCADE, related_name="insurances"
+    )
     front = models.ImageField(upload_to="insurances/", null=True, blank=True)
     back = models.ImageField(upload_to="insurances/", null=True, blank=True)
     relation = models.CharField(max_length=255)
@@ -50,4 +63,3 @@ class Insurance(BaseModel):
     group_id = models.CharField(max_length=100, blank=True)
     copay = models.BooleanField(default=False)
     deductible = models.CharField(max_length=255, blank=True)
-

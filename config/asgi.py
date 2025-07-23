@@ -12,16 +12,18 @@ import django
 
 django.setup()
 
-from azura_be.communications.consumers import NotificationConsumer, ThreadChatConsumer
-from azura_be.communications.middleware import middleware_stack
-
 import os
 import sys
 from pathlib import Path
 
-from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.routing import ProtocolTypeRouter
+from channels.routing import URLRouter
 from django.core.asgi import get_asgi_application
 from django.urls import path
+
+from azura_be.communications.consumers import NotificationConsumer
+from azura_be.communications.consumers import ThreadChatConsumer
+from azura_be.communications.middleware import middleware_stack
 
 # This allows easy placement of apps within the interior
 # azura_be directory.
@@ -58,8 +60,8 @@ application = ProtocolTypeRouter(
                 [
                     path("notification/", NotificationConsumer.as_asgi()),
                     path("threads/<str:thread_id>/", ThreadChatConsumer.as_asgi()),
-                ]
-            )
+                ],
+            ),
         ),
-    }
+    },
 )

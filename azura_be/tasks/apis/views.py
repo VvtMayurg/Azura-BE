@@ -1,7 +1,10 @@
 from rest_framework import viewsets
 
+from azura_be.tasks.apis.serializers import TaskCreateSerializer
+from azura_be.tasks.apis.serializers import TaskSerializer
+from azura_be.tasks.apis.serializers import TaskUpdateSerializer
 from azura_be.tasks.models import Task
-from azura_be.tasks.apis.serializers import TaskCreateSerializer, TaskUpdateSerializer, TaskSerializer
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "patch", "post", "delete"]
@@ -14,4 +17,3 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.action == "partial_update":
             return TaskUpdateSerializer
         return super().get_serializer_class()
-

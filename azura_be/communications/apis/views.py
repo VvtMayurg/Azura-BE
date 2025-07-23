@@ -1,5 +1,3 @@
-
-
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins
@@ -23,7 +21,9 @@ class ThreadViewSet(viewsets.ModelViewSet):
     global_params_optional = True
 
     def get_queryset(self):
-        self.queryset = self.queryset.filter(Q(created_by=self.request.user) | Q(thread_users__user=self.request.user))
+        self.queryset = self.queryset.filter(
+            Q(created_by=self.request.user) | Q(thread_users__user=self.request.user)
+        )
         return super().get_queryset()
 
     def perform_create(self, serializer):
@@ -44,12 +44,20 @@ class ThreadViewSet(viewsets.ModelViewSet):
         if user is None:
             return Response({"message": "User not found", "extra": None}, status=404)
         if ThreadUser.objects.filter(thread=thread, user=user).exists():
-            return Response({"message": "This user is already exists in this thread", "extra": None}, status=400)
+            return Response(
+                {
+                    "message": "This user is already exists in this thread",
+                    "extra": None,
+                },
+                status=400,
+            )
         ThreadUser.objects.create(user=user, thread=thread, added_by=request.user)
         return Response(ThreadSerializer(thread).data)
 
 
-class CommunicationMessageViewSet(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class CommunicationMessageViewSet(
+    mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet
+):
     queryset = CommunicationMessage.objects.all()
     serializer_class = CommunicationMessageSerializer
     http_method_names = ["get", "patch", "delete"]
