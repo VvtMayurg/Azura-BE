@@ -1,4 +1,5 @@
 from dj_rest_auth.utils import jwt_encode
+from dj_rest_auth.views import LoginView
 from dj_rest_auth.views import LogoutView
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter
@@ -197,3 +198,13 @@ class BusinessAccountSignUpViewSet(viewsets.GenericViewSet):
                 "access": str(access),
             },
         )
+
+
+class CustomLoginView(LoginView):
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data)
+        self.serializer.is_valid(raise_exception=True)
+
+        self.login()
+        return self.get_response()

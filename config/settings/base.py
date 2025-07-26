@@ -1,4 +1,4 @@
-# ruff: noqa: ERA001, E501
+# ruff: noqa: ERA001
 """Base settings to build other settings files upon."""
 
 import ssl
@@ -95,6 +95,10 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth",
     "rest_framework_simplejwt.token_blacklist",
     "djstripe",
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "django_otp.plugins.otp_email",
+    "azura_be.mobile_devices",
 ]
 
 LOCAL_SHARED_APPS = [
@@ -365,11 +369,8 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "config.authentications.DefaultJWTAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("config.authentications.DefaultJWTAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "azura_be.base.paginations.DefaultPagination",

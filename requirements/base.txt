@@ -40,3 +40,4 @@ dj-stripe==2.9.1  # https://github.com/dj-stripe/dj-stripe
 # Django Channels
 channels==4.2.2  # https://github.com/django/channels
 channels-redis==4.2.1  # https://github.com/django/channels_redis/
+django-otp==1.6.1  # https://github.com/django-otp/django-otp

@@ -12,6 +12,7 @@ from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 
 from azura_be.base.views import HomeView
+from azura_be.users.apis.views import CustomLoginView
 from azura_be.users.apis.views import CustomLogoutView
 
 urlpatterns = [
@@ -29,6 +30,7 @@ if settings.DEBUG:
 urlpatterns += [
     # API base url
     path("api/auth/logout/", CustomLogoutView.as_view()),
+    path("api/auth/login/", CustomLoginView.as_view()),
     path(
         "api/auth/password/reset/confirm/<uidb64>/<token>/",
         PasswordResetConfirmView.as_view(),
