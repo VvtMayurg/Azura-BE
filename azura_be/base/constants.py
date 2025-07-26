@@ -138,3 +138,19 @@ class CommunicationMessageType(models.TextChoices):
     IN_APP = "In App"
     EMAIL = "Email"
     SMS_TEXT = "SMS/Text"
+
+
+class NotificationCategoryChoices(models.TextChoices):
+    APPOINTMENT = "Appointments"
+    PATIENT_MESSAGE = "Patient Messages"
+    SCHEDULE = "Schedule Changes"
+    SECURITY = "Security Alerts"
+    PROFILE = "Profile Updates"
+    SYSTEM = "System Updates"
+
+
+class ReminderTypeChoices(models.TextChoices):
+    APPOINTMENT = "Appointment"
+    FOLLOW_UP = "Follow-up"
+    MEDICATION = "Medication"
+    LAB_RESULT = "Lab Result"

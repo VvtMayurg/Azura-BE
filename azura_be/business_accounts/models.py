@@ -5,6 +5,7 @@ from django_tenants.models import TenantMixin
 from djstripe.models import Card
 from djstripe.models import Customer
 from djstripe.models import Price
+from timezone_field.fields import TimeZoneField
 
 from azura_be.base.constants import CommunicationTemplateTypeChoices
 from azura_be.base.constants import CommunicationTemplateUserTypeChoices
@@ -45,7 +46,9 @@ class BusinessAccount(TenantMixin, BaseModel):
     website = models.URLField(unique=True)
     grace_code = models.CharField(max_length=255)
     web_address = models.CharField(
-        null=True, unique=True, validators=[domain_validator]
+        null=True,
+        unique=True,
+        validators=[domain_validator],
     )
     initial_completed = models.BooleanField(default=False)
 
@@ -96,19 +99,21 @@ class BusinessAccount(TenantMixin, BaseModel):
     def validate_web_address(self):
         if EnabledDomain.objects.filter(domain=self.web_address).exists():
             raise ValidationError(
-                message={"web_address": "Please choose a correct we address"}
+                message={"web_address": "Please choose a correct we address"},
             )
         for enabled_domain in EnabledDomain.objects.all():
             if self.web_address.endswith(enabled_domain.domain):
                 return True
         raise ValidationError(
-            message={"web_address": "Please choose a correct we address"}
+            message={"web_address": "Please choose a correct we address"},
         )
 
 
 class EmailConfiguration(BaseModel):
     business_account = models.OneToOneField(
-        BusinessAccount, on_delete=models.CASCADE, related_name="email_configuration"
+        BusinessAccount,
+        on_delete=models.CASCADE,
+        related_name="email_configuration",
     )
     host = models.CharField(max_length=255)
     port = models.PositiveIntegerField()
@@ -132,7 +137,9 @@ class EmailConfiguration(BaseModel):
 
 class SMSConfiguration(BaseModel):
     business_account = models.OneToOneField(
-        BusinessAccount, on_delete=models.CASCADE, related_name="sms_configuration"
+        BusinessAccount,
+        on_delete=models.CASCADE,
+        related_name="sms_configuration",
     )
     provider = models.CharField(max_length=15, choices=SMSConfigurationProviderChoices)
     from_number = models.CharField(max_length=15)
@@ -148,17 +155,15 @@ class CommunicationTemplate(BaseModel):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=15, choices=CommunicationTemplateTypeChoices)
     user_type = models.CharField(
-        max_length=15, choices=CommunicationTemplateUserTypeChoices
+        max_length=15,
+        choices=CommunicationTemplateUserTypeChoices,
     )
     subject = models.CharField(max_length=255, blank=True)
     content = models.TextField()
-    active = models.BooleanField(True)
+    active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if (
-            self.type == CommunicationTemplateTypeChoices.EMAIL.name
-            and not self.subject
-        ):
+        if self.type == CommunicationTemplateTypeChoices.EMAIL.name and not self.subject:
             raise ValidationError(message={"subject": "Subject is required"})
         if self.type == CommunicationTemplateTypeChoices.SMS.name and self.subject:
             raise ValidationError(message={"subject": "Subject is not accepteble"})
@@ -170,9 +175,42 @@ class CommunicationTemplate(BaseModel):
 
 class CommunicationTemplateVersion(BaseModel):
     template = models.ForeignKey(
-        CommunicationTemplate, on_delete=models.CASCADE, related_name="versions"
+        CommunicationTemplate,
+        on_delete=models.CASCADE,
+        related_name="versions",
     )
     new_subject = models.CharField(max_length=255, blank=True)
     new_content = models.TextField()
     old_subject = models.CharField(max_length=255, blank=True)
     old_content = models.TextField()
+
+
+class VitalAlertConfiguration(BaseModel):
+    business_account = models.ForeignKey(
+        BusinessAccount,
+        related_name="vital_alert_configurations",
+        on_delete=models.CASCADE,
+    )
+    vital_type = models.CharField(max_length=255)
+    min_range = models.DecimalField(max_digits=6, decimal_places=2)
+    min_value = models.DecimalField(max_digits=6, decimal_places=2)
+    min_normal_value = models.DecimalField(max_digits=6, decimal_places=2)
+    max_normal_value = models.DecimalField(max_digits=6, decimal_places=2)
+    max_value = models.DecimalField(max_digits=6, decimal_places=2)
+    max_range = models.DecimalField(max_digits=6, decimal_places=2)
+
+    class Meta:
+        unique_together = (("business_account", "vital_type"),)
+
+
+class AccountConfiguration(BaseModel):
+    business_account = models.OneToOneField(BusinessAccount, on_delete=models.CASCADE)
+    reminders = models.JSONField(null=True, blank=True)
+    email = models.BooleanField(default=False)
+    sms = models.BooleanField(default=False)
+    push = models.BooleanField(default=False)
+    urgent_alert = models.BooleanField(default=False)
+    default_timezone = TimeZoneField(null=True, blank=True)
+    session_timeout = models.IntegerField(default=3600)
+    date_format = models.CharField(max_length=50, blank=True)
+    audit_log_retention = models.IntegerField(default=90)

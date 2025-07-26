@@ -4,12 +4,16 @@ from django.core.exceptions import ValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 from djstripe.models import Price
 from rest_framework import serializers
+from timezone_field.rest_framework import TimeZoneSerializerField
 
+from azura_be.base.constants import ReminderTypeChoices
+from azura_be.business_accounts.models import AccountConfiguration
 from azura_be.business_accounts.models import BusinessAccount
 from azura_be.business_accounts.models import CommunicationTemplate
 from azura_be.business_accounts.models import CommunicationTemplateVersion
 from azura_be.business_accounts.models import EmailConfiguration
 from azura_be.business_accounts.models import SMSConfiguration
+from azura_be.business_accounts.models import VitalAlertConfiguration
 from azura_be.users.apis.serializers import UserRelatedSerializer
 from azura_be.users.models import User
 
@@ -49,10 +53,6 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
             "password2",
             "validate_only",
         )
-        extra_kwargs = {
-            "password1": {"write_only": True},
-            "password1": {"write_only": True},
-        }
 
     def validate_user_email(self, email):
         email = get_adapter().clean_email(email.lower())
@@ -80,7 +80,7 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
                 detail={
                     "password1": "Password and Confirm Password should be same",
                     "password2": "Password and Confirm Password should be same",
-                }
+                },
             )
         return attrs
 
@@ -97,7 +97,6 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
                     detail=serializers.as_serializer_error(exc),
                 )
         user.save()
-        # self.custom_signup(request, user)
         setup_user_email(request, user, [])
         return user
 
@@ -185,3 +184,41 @@ class CommunicationTemplateSerializer(serializers.ModelSerializer):
                 new_content=new_content,
                 new_subject=new_subject,
             )
+
+
+class VitalAlertConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VitalAlertConfiguration
+        fields = (
+            "vital_type",
+            "min_range",
+            "min_value",
+            "min_normal_value",
+            "max_normal_value",
+            "max_value",
+            "max_range",
+        )
+
+
+class ReminderConfigurationSerializer(serializers.Serializer):
+    reminder_type = serializers.ChoiceField(choices=ReminderTypeChoices)
+    duration = serializers.IntegerField()
+
+
+class AccountConfigurationSerializer(serializers.ModelSerializer):
+    reminders = ReminderConfigurationSerializer(many=True, required=False)
+    default_timezone = TimeZoneSerializerField(required=False)
+
+    class Meta:
+        model = AccountConfiguration
+        fields = (
+            "reminders",
+            "email",
+            "sms",
+            "push",
+            "urgent_alert",
+            "default_timezone",
+            "session_timeout",
+            "date_format",
+            "audit_log_retention",
+        )

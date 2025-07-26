@@ -62,7 +62,8 @@ class User(AbstractUser):
         related_name="%(app_label)s_%(class)s_updated_by",
     )
     business_accounts = models.ManyToManyField(
-        "business_accounts.BusinessAccount", blank=True
+        "business_accounts.BusinessAccount",
+        blank=True,
     )
 
     USERNAME_FIELD = "email"
@@ -89,3 +90,13 @@ class WorkShedule(BaseModel):
     day = models.CharField(max_length=10, choices=DayChoices)
     start = models.TimeField()
     end = models.TimeField()
+
+
+class UserPreference(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    notification_settings = models.JSONField(null=True, blank=True)
+    navbar_preferences = ArrayField(
+        models.CharField(max_length=100),
+        null=True,
+        blank=True,
+    )

@@ -3,10 +3,12 @@ from rest_framework import serializers
 from timezone_field.rest_framework import TimeZoneSerializerField
 
 from azura_be.base.constants import DayChoices
+from azura_be.base.constants import NotificationCategoryChoices
 from azura_be.base.serializers import Base64FileField
 from azura_be.core.apis.serializers import SpecialtyRelatedSerializer
 from azura_be.users.models import License
 from azura_be.users.models import User
+from azura_be.users.models import UserPreference
 from azura_be.users.models import WorkShedule
 
 
@@ -117,3 +119,18 @@ class WorkScheduleGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkShedule
         fields = ("id", "created_at", "updated_at", "day", "start", "end")
+
+
+class NotificationSettingSerializer(serializers.Serializer):
+    category = serializers.ChoiceField(choices=NotificationCategoryChoices)
+    email = serializers.BooleanField(default=False)
+    sms = serializers.BooleanField(default=False)
+    push = serializers.BooleanField(default=False)
+
+
+class UserPreferenceSerializer(serializers.ModelSerializer):
+    notification_settings = NotificationSettingSerializer(required=False)
+
+    class Meta:
+        model = UserPreference
+        fields = ("notification_settings", "navbar_preferences")

@@ -22,10 +22,12 @@ from azura_be.users.apis.serializers import LicenseGetSerializer
 from azura_be.users.apis.serializers import LicenseSerializer
 from azura_be.users.apis.serializers import UserCreateSerializer
 from azura_be.users.apis.serializers import UserDetailSerializer
+from azura_be.users.apis.serializers import UserPreferenceSerializer
 from azura_be.users.apis.serializers import WorkScheduleGetSerializer
 from azura_be.users.apis.serializers import WorkScheduleSerializer
 from azura_be.users.models import License
 from azura_be.users.models import User
+from azura_be.users.models import UserPreference
 from azura_be.users.models import WorkShedule
 
 
@@ -44,7 +46,7 @@ class UserViewSet(
     def get_queryset(self, *args, **kwargs):
         if not self.request.user.account_user:
             self.queryset = self.queryset.filter(account_user=False)
-        if not self.action == "list":
+        if self.action != "list":
             return self.queryset
         account_user = self.request.query_params.get("account_user")
         if account_user == "true":
@@ -61,7 +63,7 @@ class UserViewSet(
                 type=OpenApiTypes.BOOL,
                 description="Filter based on account user or provider",
             ),
-        ]
+        ],
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -99,7 +101,9 @@ class UserViewSet(
     def manage_work_schedules(self, request, *args, **kwargs):
         user = self.get_object()
         serializer = WorkScheduleSerializer(
-            data=request.data, many=True, context={"user": user}
+            data=request.data,
+            many=True,
+            context={"user": user},
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -107,7 +111,10 @@ class UserViewSet(
 
     @extend_schema(responses=WorkScheduleGetSerializer(many=True))
     @action(
-        detail=True, methods=["GET"], url_path="work-schedules", pagination_class=None
+        detail=True,
+        methods=["GET"],
+        url_path="work-schedules",
+        pagination_class=None,
     )
     def work_schedules(self, request, *args, **kwargs):
         user = self.get_object()
@@ -117,7 +124,10 @@ class UserViewSet(
 
     @extend_schema(request=LicenseSerializer, responses=LicenseSerializer)
     @action(
-        detail=True, methods=["POST"], url_path="create-license", pagination_class=None
+        detail=True,
+        methods=["POST"],
+        url_path="create-license",
+        pagination_class=None,
     )
     def create_license(self, request, *args, **kwargs):
         user = self.get_object()
@@ -126,13 +136,31 @@ class UserViewSet(
         serializer.save(user=user)
         return Response(serializer.data)
 
-    @extend_schema(responses=LicenseGetSerializer)
+    @extend_schema(responses=LicenseGetSerializer(many=True))
     @action(detail=True, methods=["POST"], url_path="licenses", pagination_class=None)
     def licenses(self, request, *args, **kwargs):
         user = self.get_object()
         licenses = License.objects.filter(user=user)
         serilaizer = LicenseGetSerializer(licenses, many=True)
         return Response(serilaizer.data)
+
+    @extend_schema(responses=UserPreferenceSerializer)
+    @action(
+        detail=False,
+        methods=["GET", "POST"],
+        url_path="preferences",
+        pagination_class=None,
+    )
+    def preferences(self, request, *args, **kwargs):
+        preference, _ = UserPreference.objects.get_or_create(user=request.user)
+
+        if request.method == "GET":
+            return Response(UserPreferenceSerializer(preference).data)
+
+        serializer = UserPreferenceSerializer(data=request.data, instance=preference)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 @extend_schema(request=CustomLogoutSerializer, responses=CustomLogoutSerializer)
@@ -151,7 +179,8 @@ class BusinessAccountSignUpViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=["POST"], url_path="signup")
     def signup(self, request):
         serializer = BusinessAccountSignUpSerializer(
-            data=request.data, context={"request": request}
+            data=request.data,
+            context={"request": request},
         )
         serializer.is_valid(raise_exception=True)
         if not serializer.validated_data.pop("validate_only", False):
@@ -166,5 +195,5 @@ class BusinessAccountSignUpViewSet(viewsets.GenericViewSet):
             {
                 "account_id": account_id,
                 "access": str(access),
-            }
+            },
         )
