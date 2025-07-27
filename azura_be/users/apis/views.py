@@ -18,12 +18,15 @@ from rest_framework.viewsets import GenericViewSet
 from azura_be.business_accounts.apis.serializers import BusinessAccountSignUpSerializer
 from azura_be.business_accounts.apis.serializers import SignUpResponseSerializer
 from azura_be.business_accounts.models import BusinessAccount
+from azura_be.mobile_devices.service import TwoFactorAuthService
 from azura_be.users.apis.serializers import CustomLogoutSerializer
 from azura_be.users.apis.serializers import LicenseGetSerializer
 from azura_be.users.apis.serializers import LicenseSerializer
+from azura_be.users.apis.serializers import SendOTPSerializer
 from azura_be.users.apis.serializers import UserCreateSerializer
 from azura_be.users.apis.serializers import UserDetailSerializer
 from azura_be.users.apis.serializers import UserPreferenceSerializer
+from azura_be.users.apis.serializers import ValidateOTPSerializer
 from azura_be.users.apis.serializers import WorkScheduleGetSerializer
 from azura_be.users.apis.serializers import WorkScheduleSerializer
 from azura_be.users.models import License
@@ -206,5 +209,46 @@ class CustomLoginView(LoginView):
         self.serializer = self.get_serializer(data=self.request.data)
         self.serializer.is_valid(raise_exception=True)
 
+        user = self.serializer.validated_data.get("user")
+        if user.two_factor_auth:
+            two_factor_auth_service = TwoFactorAuthService()
+            response = two_factor_auth_service.get_devices_response(user)
+            if response:
+                return response
+
         self.login()
         return self.get_response()
+
+
+class TwoFactorAuthenticationViewSet(viewsets.GenericViewSet):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = SendOTPSerializer
+
+    def get_serializer_class(self):
+        if self.action == "validate_otp":
+            return ValidateOTPSerializer
+        return super().get_serializer_class()
+
+    @action(detail=False, methods=["POST"], url_path="send-otp")
+    def send_otp(self, request, *args, **kwargs):
+        serializer = SendOTPSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        two_factor_auth_service = TwoFactorAuthService()
+        return two_factor_auth_service.send_otp(
+            serializer.validated_data.get("key"),
+            serializer.validated_data.get("device_id"),
+            serializer.validated_data.get("device_type"),
+        )
+
+    @action(detail=False, methods=["POST"], url_path="validate-otp")
+    def validate_otp(self, request, *args, **kwargs):
+        serializer = ValidateOTPSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        two_factor_auth_service = TwoFactorAuthService()
+        return two_factor_auth_service.validate_otp(
+            serializer.validated_data.get("key"),
+            serializer.validated_data.get("device_id"),
+            serializer.validated_data.get("device_type"),
+            serializer.validated_data.get("otp"),
+        )

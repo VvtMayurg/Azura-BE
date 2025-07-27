@@ -26,11 +26,13 @@ from azura_be.provider_groups.apis.views import DepartmentViewSet
 from azura_be.provider_groups.apis.views import ProviderGroupViewSet
 from azura_be.tasks.apis.views import TaskViewSet
 from azura_be.users.apis.views import BusinessAccountSignUpViewSet
+from azura_be.users.apis.views import TwoFactorAuthenticationViewSet
 from azura_be.users.apis.views import UserViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register("auth/login", TwoFactorAuthenticationViewSet, basename="two-factor-auth")
 router.register("appointments", AppointmentViewSet)
 router.register("threads", ThreadViewSet)
 router.register("communications", CommunicationMessageViewSet)
@@ -55,7 +57,9 @@ router.register("hcpcs-codes", HCPCSCodeViewSet)
 router.register("rx-codes", RxCodeViewSet)
 router.register("loinc-codes", LoincCodeViewSet)
 router.register(
-    "account", AccountConfigurationViseSet, basename="account-configurations"
+    "account",
+    AccountConfigurationViseSet,
+    basename="account-configurations",
 )
 
 

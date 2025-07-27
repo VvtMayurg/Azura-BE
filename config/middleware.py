@@ -12,7 +12,7 @@ from azura_be.business_accounts.models import BusinessAccount
 
 class BusinessAccountMainMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        if request.path.startswith(settings.ADMIN_URL):
+        if request.path.startswith(settings.ADMIN_URL) or request.path.startswith("/api/auth/"):
             return None
 
         connection.set_schema_to_public()
@@ -20,7 +20,7 @@ class BusinessAccountMainMiddleware(MiddlewareMixin):
         origin = request.headers.get("Origin")
 
         business_account = BusinessAccount.objects.filter(
-            web_address__iexact=origin
+            web_address__iexact=origin,
         ).first()
         if business_account is None:
             return None
@@ -34,11 +34,7 @@ class BusinessAccountMainMiddleware(MiddlewareMixin):
         if has_multi_type_tenants():
             tenant_types = get_tenant_types()
             if not hasattr(request, "tenant") or (
-                (
-                    force_public
-                    or request.business_account.schema_name == get_public_schema_name()
-                )
-                and "URLCONF" in tenant_types[public_schema_name]
+                (force_public or request.business_account.schema_name == get_public_schema_name()) and "URLCONF" in tenant_types[public_schema_name]
             ):
                 request.urlconf = get_public_schema_urlconf()
             else:
@@ -46,8 +42,5 @@ class BusinessAccountMainMiddleware(MiddlewareMixin):
                 request.urlconf = tenant_types[tenant_type]["URLCONF"]
             set_urlconf(request.urlconf)
         # Do we have a public-specific urlconf?
-        elif hasattr(settings, "PUBLIC_SCHEMA_URLCONF") and (
-            force_public
-            or request.business_account.schema_name == get_public_schema_name()
-        ):
+        elif hasattr(settings, "PUBLIC_SCHEMA_URLCONF") and (force_public or request.business_account.schema_name == get_public_schema_name()):
             request.urlconf = settings.PUBLIC_SCHEMA_URLCONF

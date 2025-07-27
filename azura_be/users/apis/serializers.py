@@ -134,3 +134,16 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPreference
         fields = ("notification_settings", "navbar_preferences")
+
+
+class SendOTPSerializer(serializers.Serializer):
+    key = serializers.CharField()
+    device_type = serializers.CharField()
+    device_id = serializers.IntegerField()
+
+
+class ValidateOTPSerializer(serializers.Serializer):
+    otp = serializers.CharField()
+    key = serializers.CharField()
+    device_type = serializers.CharField()
+    device_id = serializers.IntegerField()
