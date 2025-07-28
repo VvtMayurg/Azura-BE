@@ -163,3 +163,19 @@ class DocumentCategoryChoices(models.TextChoices):
     LAB_RESULT = "Lab Result"
     AMENDMENT = "Amendment"
     OTHER = "Other"
+
+
+class VisitNoteTypeChoices(models.TextChoices):
+    SIMPLE = "Simple"
+    SOAP = "SOAP"
+    HP1 = "H&p Note1"
+    HP2 = "H&p Note2"
+    HP_AP = "H&p Note (2 column - A/P)"
+    PRE_OP = "Pre-OP Notes"
+
+
+class NoteTypeChoices(models.TextChoices):
+    PHONE_NOTE = "Phone Note"
+    NON_VISIT_NOTE = "Non Visit Notes"
+    EMAIL = "Email Notes"
+    POINT_OF_CARE = "Point of Care Labs"

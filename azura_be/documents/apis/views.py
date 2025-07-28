@@ -8,8 +8,6 @@ from azura_be.patients.models import Patient
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
-    authentication_classes = []
-    permission_classes = []
     http_method_names = ["get", "post", "delete", "patch"]
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer

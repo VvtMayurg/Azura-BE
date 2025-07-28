@@ -20,6 +20,8 @@ from azura_be.core.apis.views import TagViewSet
 from azura_be.documents.apis.views import DocumentViewSet
 from azura_be.educations.apis.views import EducationViewSet
 from azura_be.locations.apis.views import LocationViewSet
+from azura_be.notes.apis.views import NoteViewSet
+from azura_be.notes.apis.views import VisitNoteViewSet
 from azura_be.patients.apis.views import PatientViewSet
 from azura_be.plans.apis.views import FormViewSet
 from azura_be.plans.apis.views import PlanViewSet
@@ -65,6 +67,8 @@ router.register(
 
 # Patient Related APIs
 router.register("(?P<patient_id>[0-9a-fA-F-]{36})/documents", DocumentViewSet)
+router.register("(?P<patient_id>[0-9a-fA-F-]{36})/visit-notes", VisitNoteViewSet)
+router.register("(?P<patient_id>[0-9a-fA-F-]{36})/notes", NoteViewSet)
 
 
 app_name = "api"
