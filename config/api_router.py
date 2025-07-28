@@ -17,6 +17,7 @@ from azura_be.core.apis.views import LoincCodeViewSet
 from azura_be.core.apis.views import RxCodeViewSet
 from azura_be.core.apis.views import SpecialtyViewSet
 from azura_be.core.apis.views import TagViewSet
+from azura_be.documents.apis.views import DocumentViewSet
 from azura_be.educations.apis.views import EducationViewSet
 from azura_be.locations.apis.views import LocationViewSet
 from azura_be.patients.apis.views import PatientViewSet
@@ -61,6 +62,9 @@ router.register(
     AccountConfigurationViseSet,
     basename="account-configurations",
 )
+
+# Patient Related APIs
+router.register("(?P<patient_id>[0-9a-fA-F-]{36})/documents", DocumentViewSet)
 
 
 app_name = "api"

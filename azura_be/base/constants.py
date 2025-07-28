@@ -154,3 +154,12 @@ class ReminderTypeChoices(models.TextChoices):
     FOLLOW_UP = "Follow-up"
     MEDICATION = "Medication"
     LAB_RESULT = "Lab Result"
+
+
+class DocumentCategoryChoices(models.TextChoices):
+    CLINICAL = "Clinical"
+    CONSENT = "Consent"
+    REFERRAL = "Referral"
+    LAB_RESULT = "Lab Result"
+    AMENDMENT = "Amendment"
+    OTHER = "Other"
