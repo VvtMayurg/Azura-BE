@@ -66,9 +66,9 @@ router.register(
 )
 
 # Patient Related APIs
-router.register("(?P<patient_id>[0-9a-fA-F-]{36})/documents", DocumentViewSet)
-router.register("(?P<patient_id>[0-9a-fA-F-]{36})/visit-notes", VisitNoteViewSet)
-router.register("(?P<patient_id>[0-9a-fA-F-]{36})/notes", NoteViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/documents", DocumentViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/visit-notes", VisitNoteViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/notes", NoteViewSet)
 
 
 app_name = "api"
