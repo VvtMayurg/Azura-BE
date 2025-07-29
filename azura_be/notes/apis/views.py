@@ -11,8 +11,6 @@ from azura_be.patients.models import Patient
 
 
 class VisitNoteViewSet(viewsets.ModelViewSet):
-    authentication_classes = []
-    permission_classes = []
     http_method_names = ["get", "post", "delete", "patch"]
     queryset = VisitNote.objects.all()
     serializer_class = VisitNoteSerializer
@@ -29,8 +27,6 @@ class VisitNoteViewSet(viewsets.ModelViewSet):
 
 
 class NoteViewSet(viewsets.ModelViewSet):
-    authentication_classes = []
-    permission_classes = []
     http_method_names = ["get", "post", "delete", "patch"]
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
