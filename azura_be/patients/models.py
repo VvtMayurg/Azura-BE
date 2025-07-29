@@ -2,6 +2,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from timezone_field.fields import TimeZoneField
 
+from azura_be.base.constants import CommunicationMessageType
 from azura_be.base.constants import GenderChoices
 from azura_be.base.models import BaseModel
 from azura_be.locations.models import Location
@@ -17,7 +18,9 @@ class Patient(BaseModel):
     gender = models.CharField(max_length=25, choices=GenderChoices)
     mrn = models.CharField(max_length=50, blank=True)
     provider_group = models.ForeignKey(
-        ProviderGroup, on_delete=models.PROTECT, related_name="patients"
+        ProviderGroup,
+        on_delete=models.PROTECT,
+        related_name="patients",
     )
     email = models.EmailField(blank=True)
     phone_type = models.CharField(max_length=50, blank=True)
@@ -33,7 +36,9 @@ class Patient(BaseModel):
         blank=True,
     )
     primary_provider = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="patients_primary_provider"
+        User,
+        on_delete=models.PROTECT,
+        related_name="patients_primary_provider",
     )
     referring_provider = models.CharField(max_length=255, blank=True)
     active = models.BooleanField(default=True)
@@ -53,7 +58,9 @@ class Patient(BaseModel):
 
 class Insurance(BaseModel):
     patient = models.ForeignKey(
-        Patient, on_delete=models.CASCADE, related_name="insurances"
+        Patient,
+        on_delete=models.CASCADE,
+        related_name="insurances",
     )
     front = models.ImageField(upload_to="insurances/", null=True, blank=True)
     back = models.ImageField(upload_to="insurances/", null=True, blank=True)
@@ -63,3 +70,10 @@ class Insurance(BaseModel):
     group_id = models.CharField(max_length=100, blank=True)
     copay = models.BooleanField(default=False)
     deductible = models.CharField(max_length=255, blank=True)
+
+
+class EmailSMS(BaseModel):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="communications")
+    type = models.CharField(max_length=10, choices=CommunicationMessageType)
+    subject = models.CharField(max_length=255, blank=True)
+    content = models.TextField()

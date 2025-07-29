@@ -10,6 +10,12 @@ from azura_be.plans.models import Form
 from azura_be.plans.models import Plan
 
 
+class FormRelatedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Form
+        fields = ("id", "title")
+
+
 class FormCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Form
@@ -36,6 +42,12 @@ class FormSerializer(serializers.ModelSerializer):
     class Meta:
         model = Form
         fields = "__all__"
+
+
+class PlanRelatedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plan
+        fields = ("id", "name")
 
 
 class PlanCreateSerializer(serializers.ModelSerializer):

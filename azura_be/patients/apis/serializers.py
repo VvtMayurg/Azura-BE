@@ -3,6 +3,7 @@ from timezone_field.rest_framework import TimeZoneSerializerField
 
 from azura_be.base.serializers import AddressSerializer
 from azura_be.base.serializers import Base64FileField
+from azura_be.patients.models import EmailSMS
 from azura_be.patients.models import Patient
 from azura_be.provider_groups.apis.serializers import ProviderGroupRelatedSerializer
 from azura_be.users.apis.serializers import UserRelatedSerializer
@@ -49,3 +50,20 @@ class PatientGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = "__all__"
+
+
+class EmailSMSCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailSMS
+        fields = ("type", "subject", "content")
+
+    def validate(self, attrs):
+        if attrs.get("type") == "EMAIL" and not attrs.get("subject"):
+            raise serializers.ValidationError({"subject": "Subject is required for email"})
+        return super().validate(attrs)
+
+
+class EmailSMSSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailSMS
+        fields = ("id", "created_at", "subject", "content")

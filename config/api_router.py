@@ -22,12 +22,15 @@ from azura_be.educations.apis.views import EducationViewSet
 from azura_be.locations.apis.views import LocationViewSet
 from azura_be.notes.apis.views import NoteViewSet
 from azura_be.notes.apis.views import VisitNoteViewSet
+from azura_be.patients.apis.views import EmailSMSViewSet
 from azura_be.patients.apis.views import PatientViewSet
 from azura_be.plans.apis.views import FormViewSet
 from azura_be.plans.apis.views import PlanViewSet
 from azura_be.provider_groups.apis.views import DepartmentViewSet
 from azura_be.provider_groups.apis.views import ProviderGroupViewSet
 from azura_be.tasks.apis.views import TaskViewSet
+from azura_be.treatments.apis.views import PatientFormViewSet
+from azura_be.treatments.apis.views import PatientTreatmentPlanViewSet
 from azura_be.users.apis.views import BusinessAccountSignUpViewSet
 from azura_be.users.apis.views import TwoFactorAuthenticationViewSet
 from azura_be.users.apis.views import UserViewSet
@@ -69,6 +72,9 @@ router.register(
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/documents", DocumentViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/visit-notes", VisitNoteViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/notes", NoteViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/email-sms", EmailSMSViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/treatment-plans", PatientTreatmentPlanViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/forms", PatientFormViewSet)
 
 
 app_name = "api"
