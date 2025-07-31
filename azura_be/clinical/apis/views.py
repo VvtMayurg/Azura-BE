@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -32,17 +33,14 @@ class VitalViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "delete"]
     queryset = Vital.objects.all()
     serializer_class = VitalSerializer
+    pagination_class = None
 
     def get_queryset(self):
         patient = get_object_or_404(Patient, pk=self.kwargs.get("patient_id"))
         self.queryset = self.queryset.filter(patient=patient)
         return super().get_queryset()
 
-    def get_serializer_class(self):
-        if self.action == "create":
-            return VitalCreateSerializer(many=True)
-        return super().get_serializer_class()
-
+    @extend_schema(responses=VitalCreateSerializer(many=True), request=VitalCreateSerializer(many=True))
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
