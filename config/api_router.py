@@ -4,6 +4,8 @@ from rest_framework.routers import SimpleRouter
 
 from azura_be.appointments.apis.views import AppointmentViewSet
 from azura_be.business_accounts.apis.views import AccountConfigurationViseSet
+from azura_be.clinical.apis.views import MedicationViewSet
+from azura_be.clinical.apis.views import VitalViewSet
 from azura_be.communications.apis.views import CommunicationMessageViewSet
 from azura_be.communications.apis.views import ThreadViewSet
 from azura_be.core.apis.views import CategoryViewSet
@@ -75,6 +77,8 @@ router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/notes", NoteViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/email-sms", EmailSMSViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/treatment-plans", PatientTreatmentPlanViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/forms", PatientFormViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/vitals", VitalViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/medications", MedicationViewSet)
 
 
 app_name = "api"
