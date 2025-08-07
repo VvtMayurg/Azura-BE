@@ -11,6 +11,7 @@ class ProviderGroup(BaseModel):
     name = models.CharField(max_length=255, unique=True)
     website = models.URLField(blank=True)
     email = models.EmailField(blank=True)
+    code = models.CharField(max_length=50, null=True, unique=True)
     status = models.CharField(
         max_length=15,
         choices=ProviderGroupLocationStatusChoices,

@@ -11,8 +11,11 @@ from azura_be.provider_groups.models import ProviderGroup
 
 class Location(BaseModel):
     name = models.CharField(max_length=255)
+    type = models.CharField(max_length=50, blank=True)
     provider_group = models.ForeignKey(
-        ProviderGroup, on_delete=models.PROTECT, related_name="locations"
+        ProviderGroup,
+        on_delete=models.PROTECT,
+        related_name="locations",
     )
     email = models.EmailField(blank=True)
     phone = models.CharField(

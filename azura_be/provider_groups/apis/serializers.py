@@ -39,6 +39,7 @@ class ProviderGroupPostSerializer(serializers.ModelSerializer):
             "physical_address",
             "bio",
             "timezone",
+            "code",
         )
 
 
@@ -63,6 +64,7 @@ class ProviderGroupSerializer(serializers.ModelSerializer):
             "physical_address",
             "bio",
             "timezone",
+            "code",
         )
 
 

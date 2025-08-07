@@ -48,6 +48,7 @@ class LocationPostSerializer(serializers.ModelSerializer):
             "picture",
             "specialties",
             "working_hours",
+            "type",
         )
 
     def create(self, validated_data):
@@ -65,7 +66,8 @@ class LocationPostSerializer(serializers.ModelSerializer):
     def handle_working_locations(self, location, working_hours):
         for working_hour in working_hours or []:
             working_hour_obj = LocationWorkingHour.objects.filter(
-                location=location, day=working_hour.get("day")
+                location=location,
+                day=working_hour.get("day"),
             ).first()
             if working_hour_obj is not None:
                 working_hour_obj.start_at = working_hour.get("start_at")
@@ -117,4 +119,5 @@ class LocationSerializer(serializers.ModelSerializer):
             "picture",
             "specialties",
             "working_hours",
+            "type",
         )

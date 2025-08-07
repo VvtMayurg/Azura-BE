@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter
@@ -6,8 +7,15 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
+from rest_framework.filters import SearchFilter
 
-from azura_be.base.filterset_classes import SpecialtyFilter
+from azura_be.core.apis.filters import ConditionFilter
+from azura_be.core.apis.filters import CPTCodeFilter
+from azura_be.core.apis.filters import HCPCSCodeFilter
+from azura_be.core.apis.filters import ICDCodeFilter
+from azura_be.core.apis.filters import LoincCodeFilter
+from azura_be.core.apis.filters import RxCodeFilter
+from azura_be.core.apis.filters import SpecialtyFilter
 from azura_be.core.apis.serializers import CategorySerializer
 from azura_be.core.apis.serializers import ConditionGetSerializer
 from azura_be.core.apis.serializers import ConditionSerializer
@@ -42,30 +50,45 @@ from azura_be.core.models import Tag
 class FrequencyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Frequency.objects.all()
     serializer_class = FrequencySerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering_fields = ["name"]
+    ordering = ["name"]
 
 
 class CategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering_fields = ["name"]
+    ordering = ["name"]
 
 
 class TagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering_fields = ["name"]
+    ordering = ["name"]
 
 
 class FlagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Flag.objects.all()
     serializer_class = FlagSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering_fields = ["name"]
+    ordering = ["name"]
 
 
 class SpecialtyViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
 
-    # Filtering, Searching and Ordering
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = SpecialtyFilter
-    ordering_fields = ["name", "active", "emergency_available", "created_at"]
+    ordering_fields = ["name", "active", "category"]
     ordering = ["name"]
 
     queryset = Specialty.objects.all()
@@ -75,10 +98,7 @@ class SpecialtyViewSet(viewsets.ModelViewSet):
         if self.action != "list":
             return queryset
         queryset = super().filter_queryset(queryset)
-        if (
-            self.request.query_params.get("sub_specialties") != "true"
-            and self.action == "list"
-        ):
+        if self.request.query_params.get("sub_specialties") != "true" and self.action == "list":
             return queryset.filter(parent=None)
         return queryset
 
@@ -105,7 +125,7 @@ class SpecialtyViewSet(viewsets.ModelViewSet):
         search = request.query_params.get("search")
         if search:
             specialties = specialties.filter(
-                Q(name__icontains=search) | Q(description__icontains=search)
+                Q(name__icontains=search) | Q(description__icontains=search),
             )
         page = self.paginate_queryset(specialties)
         serializer = SpecialtyGetSerializer(page, many=True)
@@ -114,6 +134,11 @@ class SpecialtyViewSet(viewsets.ModelViewSet):
 
 class ICDCodeViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
+
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ICDCodeFilter
+    ordering_fields = ["title", "code", "icd9"]
+    ordering = ["title"]
 
     queryset = ICDCode.objects.all()
     serializer_class = ICDCodeGetSerializer
@@ -127,6 +152,11 @@ class ICDCodeViewSet(viewsets.ModelViewSet):
 class ConditionViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
 
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ConditionFilter
+    ordering_fields = ["name"]
+    ordering = ["name"]
+
     queryset = Condition.objects.all()
     serializer_class = ConditionGetSerializer
 
@@ -138,6 +168,11 @@ class ConditionViewSet(viewsets.ModelViewSet):
 
 class CPTCodeViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
+
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = CPTCodeFilter
+    ordering_fields = ["title", "code", "type", "category", "section"]
+    ordering = ["title"]
 
     queryset = CPTCode.objects.all()
     serializer_class = CPTCodeGetSerializer
@@ -151,6 +186,11 @@ class CPTCodeViewSet(viewsets.ModelViewSet):
 class HCPCSCodeViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
 
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = HCPCSCodeFilter
+    ordering_fields = ["title", "code", "type", "sequence_number"]
+    ordering = ["title"]
+
     queryset = HCPCSCode.objects.all()
     serializer_class = HCPCSCodeGetSerializer
 
@@ -163,6 +203,11 @@ class HCPCSCodeViewSet(viewsets.ModelViewSet):
 class RxCodeViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
 
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = RxCodeFilter
+    ordering_fields = ["title", "code", "ndc"]
+    ordering = ["title"]
+
     queryset = RxCode.objects.all()
     serializer_class = RxCodeGetSerializer
 
@@ -174,6 +219,11 @@ class RxCodeViewSet(viewsets.ModelViewSet):
 
 class LoincCodeViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
+
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = LoincCodeFilter
+    ordering_fields = ["code", "category"]
+    ordering = ["code"]
 
     queryset = LoincCode.objects.all()
     serializer_class = LoincCodeGetSerializer
