@@ -50,7 +50,7 @@ class Appointment(BaseModel):
         return super().save(*args, **kwargs)
 
 
-class Encounter(models.Model):
+class Encounter(BaseModel):
     appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name="encounter")
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="encounters")
