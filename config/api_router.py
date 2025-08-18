@@ -24,6 +24,7 @@ from azura_be.educations.apis.views import EducationViewSet
 from azura_be.locations.apis.views import LocationViewSet
 from azura_be.notes.apis.views import NoteViewSet
 from azura_be.notes.apis.views import VisitNoteViewSet
+from azura_be.patient_portal.apis.views import PatientPortalViewSet
 from azura_be.patients.apis.views import EmailSMSViewSet
 from azura_be.patients.apis.views import PatientViewSet
 from azura_be.plans.apis.views import FormViewSet
@@ -42,6 +43,7 @@ router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
 router.register("dashboards", DashboardViewSet, basename="dashboards")
+router.register("patient-portal", PatientPortalViewSet, basename="patient-portal")
 router.register("auth/login", TwoFactorAuthenticationViewSet, basename="two-factor-auth")
 router.register("appointments", AppointmentViewSet)
 router.register("threads", ThreadViewSet)

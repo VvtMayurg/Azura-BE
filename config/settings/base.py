@@ -122,6 +122,7 @@ TENANT_APPS = [
     "azura_be.notes",
     "azura_be.treatments",
     "azura_be.clinical",
+    "azura_be.patient_portal",
 ]
 
 SHARED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_SHARED_APPS

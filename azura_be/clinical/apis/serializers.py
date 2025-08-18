@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from azura_be.clinical.models import LabResult
 from azura_be.clinical.models import Medication
 from azura_be.clinical.models import Vital
 
@@ -26,3 +27,9 @@ class MedicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medication
         fields = ("id", "medicine", "type", "sig", "qty", "unit", "refills", "days")
+
+
+class LabResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LabResult
+        exclude = ("patient",)

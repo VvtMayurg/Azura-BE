@@ -54,7 +54,7 @@ def provider_dashboard_stats(user):
             many=True,
         ).data,
         "todo_tasks": TaskSerializer(Task.objects.filter(user=user, due_at__date=today, completed=False), many=True),
-        "chat": ThreadMessageSerializer(ThreadMessage.objects.filter(thread__thread_users__user=user, read=False).exclude(user=user), many=True),
+        "chat": ThreadMessageSerializer(ThreadMessage.objects.filter(thread__thread_users__user=user, read=False).exclude(user=user), many=True).data,
     }
 
 

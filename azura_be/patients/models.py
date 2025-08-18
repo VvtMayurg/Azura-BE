@@ -54,6 +54,7 @@ class Patient(BaseModel):
     )
     contact_preferences = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="patient")
 
 
 class Insurance(BaseModel):
