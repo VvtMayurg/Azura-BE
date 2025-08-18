@@ -452,3 +452,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# LiveKit
+LIVEKIT_API_KEY = env("LIVEKIT_API_KEY", default="")
+LIVEKIT_API_SECRET = env("LIVEKIT_API_SECRET", default="")

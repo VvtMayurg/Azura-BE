@@ -28,6 +28,7 @@ from azura_be.patients.apis.views import EmailSMSViewSet
 from azura_be.patients.apis.views import PatientViewSet
 from azura_be.plans.apis.views import FormViewSet
 from azura_be.plans.apis.views import PlanViewSet
+from azura_be.provider_groups.apis.views import DashboardViewSet
 from azura_be.provider_groups.apis.views import DepartmentViewSet
 from azura_be.provider_groups.apis.views import ProviderGroupViewSet
 from azura_be.tasks.apis.views import TaskViewSet
@@ -40,6 +41,7 @@ from azura_be.users.apis.views import UserViewSet
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register("dashboards", DashboardViewSet, basename="dashboards")
 router.register("auth/login", TwoFactorAuthenticationViewSet, basename="two-factor-auth")
 router.register("appointments", AppointmentViewSet)
 router.register("threads", ThreadViewSet)

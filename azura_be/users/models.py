@@ -25,6 +25,7 @@ class User(AbstractUser):
     sms_notification = models.BooleanField(default=True)
     auto_form_save = models.BooleanField(default=False)
 
+    is_provider = models.BooleanField(default=True)
     provider_groups = ArrayField(models.UUIDField(), null=True, blank=True)
     departments = ArrayField(models.UUIDField(), null=True, blank=True)
     primary_location = models.UUIDField(null=True, blank=True)

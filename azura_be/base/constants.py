@@ -129,9 +129,20 @@ class AppointmentVisitTypeChoices(models.TextChoices):
 
 
 class AppointmentStatusChoices(models.TextChoices):
+    SCHEDULED = "Scheduled"
     PENDING = "Pending"
     IN_PROGRESS = "In Progress"
     COMPLETED = "Completed"
+    CANCELLED = "Cancelled"
+    NOT_SHOW = "Not Show"
+    DECLINED = "Declined"
+
+
+class EncounterStatusChoice(models.TextChoices):
+    PLANED = "Planed"
+    IN_PROGRESS = "In Progress"
+    COMPLETED = "Completed"
+    CANCELLED = "Cancelled"
 
 
 class CommunicationMessageType(models.TextChoices):
