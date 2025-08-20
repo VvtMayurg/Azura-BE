@@ -49,6 +49,9 @@ class Appointment(BaseModel):
             self.completed_at = timezone.now()
         return super().save(*args, **kwargs)
 
+    def room_name(self):
+        return f"{self.patient.first_name} {self.patient.last_name} - {self.start_at}"
+
 
 class Encounter(BaseModel):
     appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name="encounter")

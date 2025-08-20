@@ -54,3 +54,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = "__all__"
+
+
+class VideoCallTokenSerializer(serializers.Serializer):
+    toke = serializers.CharField()
