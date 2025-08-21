@@ -76,7 +76,7 @@ class BusinessAccount(TenantMixin, BaseModel):
         related_name="default_account_cards",
     )
 
-    auto_create_schema = True
+    auto_create_schema = False
 
     def save(self, *args, **kwargs):
         if not self.schema_name:
@@ -84,6 +84,8 @@ class BusinessAccount(TenantMixin, BaseModel):
         if self.web_address:
             self.web_address = self.web_address.lower()
             self.validate_web_address()
+        if self.initial_completed:
+            self.auto_create_schema = True
         if self.stripe_customer is None:
             self.create_stripe_user()
         return super().save(*args, **kwargs)

@@ -56,7 +56,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Tenant Configurations
 TENANT_MODEL = "business_accounts.BusinessAccount"
-TENANT_DOMAIN_MODEL = "organizations.Domain"
 
 # URLS
 # ------------------------------------------------------------------------------
