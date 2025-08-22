@@ -417,17 +417,16 @@ SIMPLE_JWT = {
 
 
 # CORS origin whitelist
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://0.0.0.0:8000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "*",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://api.dev.azuraemr.com",
+    "https://api.qa.azuraemr.com",
+    "https://api.stage.azuraemr.com",
+    "https://api.azuraemr.com",
 ]
 
 
