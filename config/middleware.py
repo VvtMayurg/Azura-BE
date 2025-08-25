@@ -17,7 +17,7 @@ class BusinessAccountMainMiddleware(MiddlewareMixin):
             return None
 
         connection.set_schema_to_public()
-        origin = request.headers.get("Origin")
+        origin = request.headers.get("Origin") or request.get_host()
 
         business_account = BusinessAccount.objects.filter(
             web_address__iexact=origin,
