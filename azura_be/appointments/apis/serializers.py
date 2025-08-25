@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from azura_be.appointments.models import Appointment
+from azura_be.appointments.models import Vaccine
 from azura_be.patients.apis.serializers import PatientRelatedSerializer
 from azura_be.users.apis.serializers import UserRelatedSerializer
 
@@ -58,3 +59,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class VideoCallTokenSerializer(serializers.Serializer):
     toke = serializers.CharField()
+
+
+class VaccinePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vaccine
+        fields = ("vaccines", "location", "scheduled_at", "phone", "email", "emergency_contact", "insurance_provider", "member_id", "group_number", "notes")
+
+
+class VaccineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vaccine
+        exclude = ("patient",)

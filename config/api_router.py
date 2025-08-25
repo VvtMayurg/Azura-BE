@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
 
 from azura_be.appointments.apis.views import AppointmentViewSet
+from azura_be.appointments.apis.views import VaccineViewSet
 from azura_be.business_accounts.apis.views import AccountConfigurationViseSet
 from azura_be.clinical.apis.views import MedicationViewSet
 from azura_be.clinical.apis.views import VitalViewSet
@@ -83,6 +84,7 @@ router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/treatment-plans", Pat
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/forms", PatientFormViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/vitals", VitalViewSet)
 router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/medications", MedicationViewSet)
+router.register("patients/(?P<patient_id>[0-9a-fA-F-]{36})/vaccines", VaccineViewSet)
 
 
 app_name = "api"

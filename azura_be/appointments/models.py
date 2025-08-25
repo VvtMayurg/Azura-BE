@@ -1,3 +1,5 @@
+from django.contrib.postgres.fields import ArrayField
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 
@@ -66,6 +68,42 @@ class Encounter(BaseModel):
 
     diagnosis = models.TextField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return super().__str__()
+
+
+class Vaccine(BaseModel):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="vaccines")
+    vaccines = ArrayField(models.CharField(max_length=100))
+    location = models.ForeignKey(Location, on_delete=models.PROTECT)
+    scheduled_at = models.DateTimeField()
+    phone = models.CharField(
+        max_length=15,
+        validators=[
+            RegexValidator(
+                regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
+                message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
+                code="invalid_phone",
+            ),
+        ],
+    )
+    email = models.EmailField()
+    emergency_contact = models.CharField(
+        max_length=15,
+        validators=[
+            RegexValidator(
+                regex=r"^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$",
+                message="Phone number format must be one of (XXX) XXX-XXXX or XXX-XXX-XXXX",
+                code="invalid_phone",
+            ),
+        ],
+    )
+    insurance_provider = models.CharField(max_length=255)
+    member_id = models.CharField(max_length=50)
+    group_number = models.CharField(max_length=50)
+    notes = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
         return super().__str__()
