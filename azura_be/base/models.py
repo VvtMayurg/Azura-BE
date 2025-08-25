@@ -1,11 +1,8 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.db import models
 
 from azura_be.base.context import current_context
-
-User = get_user_model()
 
 
 class BaseModel(models.Model):
@@ -28,7 +25,7 @@ class BaseModel(models.Model):
 
     def save(self, *args, **kwargs):
         user = getattr(current_context, "user", None)
-        if isinstance(user, User):
+        if hasattr(user, "pk"):
             if not self.pk:
                 self.created_by = self.created_by if self.created_by else user.pk
                 self.updated_by = self.updated_by if self.updated_by else user.pk
