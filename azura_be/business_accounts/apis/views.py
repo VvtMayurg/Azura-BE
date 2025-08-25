@@ -1,3 +1,5 @@
+from djstripe.models import Price
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -10,6 +12,7 @@ from azura_be.business_accounts.apis.serializers import CardIntentSerializer
 from azura_be.business_accounts.apis.serializers import CommunicationTemplateSerializer
 from azura_be.business_accounts.apis.serializers import EmailConfigurationSerializer
 from azura_be.business_accounts.apis.serializers import PlanSubscriptionSerializer
+from azura_be.business_accounts.apis.serializers import PricePlanSerializer
 from azura_be.business_accounts.apis.serializers import SMSConfigurationSerializer
 from azura_be.business_accounts.apis.serializers import VitalAlertConfigurationSerializer
 from azura_be.business_accounts.models import AccountConfiguration
@@ -39,7 +42,14 @@ class AccountConfigurationViseSet(viewsets.GenericViewSet):
             return VitalAlertConfigurationSerializer
         if self.action == "vital_alert_configurations":
             return VitalAlertConfigurationSerializer(many=True)
+        if self.action == "add_card":
+            return PlanSubscriptionSerializer
         return super().get_serializer_class()
+
+    @extend_schema(responses=PricePlanSerializer(many=True))
+    @action(detail=False, methods=["GET"], url_path="plans", pagination_class=None)
+    def get_plans(self, *args, **kwargs):
+        return Response(PricePlanSerializer(Price.objects.all().distinct("unit_amount")).data)
 
     @action(detail=True, methods=["GET"], url_path="card-intent")
     def card_intent(self, request, *args, **kwargs):
@@ -56,7 +66,7 @@ class AccountConfigurationViseSet(viewsets.GenericViewSet):
         )
         return Response({"client_secret": setup_intent.client_secret})
 
-    @action(detail=True, methods=["GET"], url_path="add-card")
+    @action(detail=True, methods=["POST"], url_path="add-card")
     def add_card(self, request, *args, **kwargs):
         business_account = self.get_object()
         serializer = PlanSubscriptionSerializer(data=request.data)

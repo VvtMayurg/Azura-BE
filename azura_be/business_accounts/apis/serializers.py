@@ -18,6 +18,12 @@ from azura_be.users.apis.serializers import UserRelatedSerializer
 from azura_be.users.models import User
 
 
+class PricePlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Price
+        fields = ("id", "unit_amount", "currency")
+
+
 class CardIntentSerializer(serializers.Serializer):
     client_secret = serializers.CharField()
 
