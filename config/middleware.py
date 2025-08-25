@@ -17,10 +17,10 @@ class BusinessAccountMainMiddleware(MiddlewareMixin):
             return None
 
         connection.set_schema_to_public()
-        origin = request.headers.get("Origin") or request.get_host()
+        origin = request.headers.get("Origin") or request.get_host() or ""
 
         business_account = BusinessAccount.objects.filter(
-            web_address__iexact=origin,
+            web_address__iexact=origin.replace("http://", "").replace("https://", ""),
         ).first()
         if business_account is None:
             return None
