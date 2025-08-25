@@ -49,7 +49,7 @@ class AccountConfigurationViseSet(viewsets.GenericViewSet):
     @extend_schema(responses=PricePlanSerializer(many=True))
     @action(detail=False, methods=["GET"], url_path="plans", pagination_class=None)
     def get_plans(self, *args, **kwargs):
-        return Response(PricePlanSerializer(Price.objects.all().distinct("unit_amount")).data)
+        return Response(PricePlanSerializer(Price.objects.all().distinct("unit_amount"), many=True).data)
 
     @action(detail=True, methods=["GET"], url_path="card-intent")
     def card_intent(self, request, *args, **kwargs):
