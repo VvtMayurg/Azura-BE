@@ -1,6 +1,5 @@
 import asyncio
 
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -10,16 +9,11 @@ from rest_framework.response import Response
 from azura_be.appointments.apis.serializers import AppointmentCreateSerializer
 from azura_be.appointments.apis.serializers import AppointmentSerializer
 from azura_be.appointments.apis.serializers import AppointmentUpdateSerializer
-from azura_be.appointments.apis.serializers import VaccinePostSerializer
-from azura_be.appointments.apis.serializers import VaccineSerializer
 from azura_be.appointments.apis.serializers import VideoCallTokenSerializer
 from azura_be.appointments.filters import AppointmentFilter
-from azura_be.appointments.filters import VaccineFilter
 from azura_be.appointments.models import Appointment
-from azura_be.appointments.models import Vaccine
 from azura_be.appointments.utils import generate_livekit_token
 from azura_be.appointments.utils import start_video_call_recording
-from azura_be.patients.models import Patient
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
@@ -53,25 +47,3 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         appointment = self.get_object()
         asyncio.run(start_video_call_recording(str(appointment.id), appointment.room_name()))
         return Response({"detail": "Recording started"})
-
-
-class VaccineViewSet(viewsets.ModelViewSet):
-    http_method_names = ["get", "patch", "post", "delete"]
-    queryset = Vaccine.objects.all()
-    serializer_class = VaccineSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = VaccineFilter
-
-    def get_queryset(self):
-        patient = get_object_or_404(Patient, pk=self.kwargs.get("patient_id"))
-        self.queryset = self.queryset.filter(patient=patient)
-        return super().get_queryset()
-
-    def get_serializer_class(self):
-        if self.action in ["create", "partial_update"]:
-            return VaccinePostSerializer
-        return super().get_serializer_class()
-
-    def perform_create(self, serializer):
-        patient = get_object_or_404(Patient, pk=self.kwargs.get("patient_id"))
-        return serializer.save(patient=patient)
