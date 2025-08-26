@@ -190,3 +190,10 @@ class NoteTypeChoices(models.TextChoices):
     NON_VISIT_NOTE = "Non Visit Notes"
     EMAIL = "Email Notes"
     POINT_OF_CARE = "Point of Care Labs"
+
+
+class QuestionTypeChoices(models.TextChoices):
+    FREE_TEXT = "Free Text"
+    SINGLE_SELECT = "Single Select"
+    MULTI_SELECT = "Multi Select"
+    FILE_UPLOAD = "File Upload"
