@@ -54,11 +54,6 @@ class AccountConfigurationViseSet(viewsets.GenericViewSet):
     @action(detail=True, methods=["GET"], url_path="card-intent")
     def card_intent(self, request, *args, **kwargs):
         business_account = self.get_object()
-        if request.user.id != business_account.created_by:
-            return Response(
-                {"detail": "You do not have permission to perform this action"},
-                status=403,
-            )
 
         setup_intent = create_card_intent(
             business_account.stripe_customer,
