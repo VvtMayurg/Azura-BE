@@ -1,14 +1,3 @@
-from django.db.models import Case
-from django.db.models import Count
-from django.db.models import ExpressionWrapper
-from django.db.models import F
-from django.db.models import IntegerField
-from django.db.models import Value
-from django.db.models import When
-from django.db.models.functions import ExtractDay
-from django.db.models.functions import ExtractMonth
-from django.db.models.functions import ExtractYear
-from django.db.models.functions import Now
 from django.utils import timezone
 
 from azura_be.appointments.apis.serializers import AppointmentSerializer
@@ -66,34 +55,6 @@ def admin_dashboard_stats(user):
     organization_users = User.objects.filter(is_provider=False).count()
     users = User.objects.all().count()
 
-    patient_age_groups = (
-        Patient.objects.all()
-        .annotate()
-        .annotate(
-            age=ExpressionWrapper(
-                ExtractYear(Now())
-                - ExtractYear(F("date_of_birth"))
-                - Case(
-                    When(
-                        # If birthday hasn't occurred yet this year, subtract 1
-                        (ExtractMonth(Now()) < ExtractMonth(F("date_of_birth")))
-                        | ((ExtractMonth(Now()) == ExtractMonth(F("date_of_birth"))) & (ExtractDay(Now()) < ExtractDay(F("date_of_birth")))),
-                        then=Value(1),
-                    ),
-                    default=Value(0),
-                    output_field=IntegerField(),
-                ),
-                output_field=IntegerField(),
-            ),
-        )
-        .aggregate(
-            under_18=Count(Case(When(age__lt=18, then=1), output_field=IntegerField())),
-            above_18_under_25=Count(Case(When(age__gte=18, age__lt=25, then=1), output_field=IntegerField())),
-            above_36_under_55=Count(Case(When(age__gte=36, age__lt=55, then=1), output_field=IntegerField())),
-            above_56=Count(Case(When(age__gte=56, then=1), output_field=IntegerField())),
-        )
-    )
-
     return {
         "total_patients": Patient.objects.all().count(),
         "healthcare_providers": User.objects.all(is_provider=True).count(),
@@ -125,7 +86,12 @@ def admin_dashboard_stats(user):
             "configurations": 1,
         },
         "analytics": {
-            "age_distribution": patient_age_groups,
+            "age_distribution": {
+                "under_18": 0,
+                "above_18_under_25": 0,
+                "above_36_under_55": 0,
+                "above_56": 0,
+            },
             "monthly_registrations": {
                 "jan": 1,
                 "feb": 1,
