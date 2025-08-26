@@ -21,7 +21,7 @@ from azura_be.users.models import User
 class PricePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Price
-        fields = ("id", "unit_amount", "currency")
+        fields = ("id", "unit_amount", "currency", "description", "metadata", "lookup_key")
 
 
 class CardIntentSerializer(serializers.Serializer):
