@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
 
 from azura_be.appointments.apis.views import AppointmentViewSet
+from azura_be.billings.apis.views import InvoiceViewSet
 from azura_be.business_accounts.apis.views import AccountConfigurationViseSet
 from azura_be.clinical.apis.views import MedicationViewSet
 from azura_be.clinical.apis.views import VitalViewSet
@@ -43,6 +44,7 @@ from azura_be.users.apis.views import UserViewSet
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register("invoices", InvoiceViewSet, basename="invoices")
 router.register("dashboards", DashboardViewSet, basename="dashboards")
 router.register("patient-portal", PatientPortalViewSet, basename="patient-portal")
 router.register("auth/login", TwoFactorAuthenticationViewSet, basename="two-factor-auth")
