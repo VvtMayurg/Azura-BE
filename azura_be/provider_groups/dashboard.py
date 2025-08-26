@@ -57,7 +57,7 @@ def admin_dashboard_stats(user):
 
     return {
         "total_patients": Patient.objects.all().count(),
-        "healthcare_providers": User.objects.all(is_provider=True).count(),
+        "healthcare_providers": User.objects.filter(is_provider=True).count(),
         "monthly_revenue": 1,
         "system_uptime": 1,
         "overview": {
