@@ -60,6 +60,11 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
             "validate_only",
         )
 
+    def validate_web_address(self, value):
+        if value and BusinessAccount.objects.filter(web_address__iexact=value).exists():
+            raise serializers.ValidationError(detail="Please choose different web address! This web address already in use.")
+        return value
+
     def validate_user_email(self, email):
         email = get_adapter().clean_email(email.lower())
         if User.objects.filter(email=email).exists():
