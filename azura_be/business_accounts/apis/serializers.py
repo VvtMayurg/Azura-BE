@@ -18,6 +18,12 @@ from azura_be.users.apis.serializers import UserRelatedSerializer
 from azura_be.users.models import User
 
 
+class PricePlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Price
+        fields = ("id", "unit_amount", "currency", "description", "metadata", "lookup_key")
+
+
 class CardIntentSerializer(serializers.Serializer):
     client_secret = serializers.CharField()
 
@@ -53,6 +59,11 @@ class BusinessAccountSignUpSerializer(serializers.ModelSerializer):
             "password2",
             "validate_only",
         )
+
+    def validate_web_address(self, value):
+        if value and BusinessAccount.objects.filter(web_address__iexact=value).exists():
+            raise serializers.ValidationError(detail="Please choose different web address! This web address already in use.")
+        return value
 
     def validate_user_email(self, email):
         email = get_adapter().clean_email(email.lower())

@@ -33,6 +33,15 @@ from azura_be.users.models import License
 from azura_be.users.models import User
 from azura_be.users.models import UserPreference
 from azura_be.users.models import WorkShedule
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+from azura_be.users.filters import UserFilter
+from azura_be.users.filters import LicenseFilter
+from azura_be.users.filters import WorkScheduleFilter
+
+
+
+
 
 
 class UserViewSet(
@@ -41,11 +50,32 @@ class UserViewSet(
     CreateModelMixin,
     UpdateModelMixin,
     GenericViewSet,
-):
+    ):
     serializer_class = UserDetailSerializer
     http_method_names = ["get", "post", "patch"]
     queryset = User.objects.all()
     lookup_field = "pk"
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = UserFilter
+    ordering = ["role"]
+    ordering_fields = [            
+            "email", 
+            "first_name", 
+            "last_name", 
+            "role",
+            "is_provider", 
+            "email_notification", 
+            "sms_notification",
+            "auto_form_save", 
+            "two_factor_auth",
+            "provider_groups", 
+            "departments",
+            "created_at_before", 
+            "created_at_after",
+            "updated_at_before", 
+            "updated_at_after",
+            "business_account",
+            ]
 
     def get_queryset(self, *args, **kwargs):
         if not self.request.user.account_user:
@@ -252,3 +282,42 @@ class TwoFactorAuthenticationViewSet(viewsets.GenericViewSet):
             serializer.validated_data.get("device_type"),
             serializer.validated_data.get("otp"),
         )
+
+class LicenseViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "patch", "post", "delete"]
+    queryset = License.objects.all()
+    serializer_class = LicenseSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = LicenseFilter
+    ordering_fields = [
+            "number", 
+            "state", 
+            "npi", 
+            "dea_number",
+            "expiry_before", 
+            "expiry_after",
+            "user_id", 
+            "user_email",
+            "specialty_id", 
+            "specialty_name",
+    ]
+    ordering = ["User_id"]
+    
+    
+class WorkScheduleViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "patch", "post", "delete"]
+    queryset = WorkShedule.objects.all()
+    serializer_class = WorkScheduleSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = WorkScheduleFilter
+    ordering_fields = [
+            "day",
+            "start_after", 
+            "start_before",
+            "end_after", 
+            "end_before",
+            "user_id", 
+            "user_email",
+    ]
+    ordering = ["User_id"]
+

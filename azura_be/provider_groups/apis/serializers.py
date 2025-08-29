@@ -31,6 +31,7 @@ class ProviderGroupPostSerializer(serializers.ModelSerializer):
         model = ProviderGroup
         fields = (
             "name",
+            "group_type",
             "website",
             "email",
             "status",
@@ -56,6 +57,7 @@ class ProviderGroupSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "name",
+            "group_type",
             "website",
             "email",
             "status",

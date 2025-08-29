@@ -56,7 +56,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Tenant Configurations
 TENANT_MODEL = "business_accounts.BusinessAccount"
-TENANT_DOMAIN_MODEL = "organizations.Domain"
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -418,13 +417,7 @@ SIMPLE_JWT = {
 
 
 # CORS origin whitelist
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://0.0.0.0:8000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -458,3 +451,9 @@ CHANNEL_LAYERS = {
 # LiveKit
 LIVEKIT_API_KEY = env("LIVEKIT_API_KEY", default="")
 LIVEKIT_API_SECRET = env("LIVEKIT_API_SECRET", default="")
+LIVEKIT_BASE_URL = env("LIVEKIT_BASE_URL", default="")
+
+# Billing
+BILLING_BASE_URL = env("BILLING_BASE_URL", default="")
+BILLING_USERNAME = env("BILLING_USERNAME", default="")
+BILLING_PASSWORD = env("BILLING_PASSWORD", default="")

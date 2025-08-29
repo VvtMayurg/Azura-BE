@@ -9,6 +9,7 @@ from azura_be.users.models import User
 
 class ProviderGroup(BaseModel):
     name = models.CharField(max_length=255, unique=True)
+    group_type = models.CharField(max_length=50, blank=True)
     website = models.URLField(blank=True)
     email = models.EmailField(blank=True)
     code = models.CharField(max_length=50, null=True, unique=True)
