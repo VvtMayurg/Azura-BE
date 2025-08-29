@@ -40,9 +40,13 @@ from azura_be.treatments.apis.views import PatientTreatmentPlanViewSet
 from azura_be.users.apis.views import BusinessAccountSignUpViewSet
 from azura_be.users.apis.views import TwoFactorAuthenticationViewSet
 from azura_be.users.apis.views import UserViewSet
+from azura_be.users.apis.views import LicenseViewSet
+from azura_be.users.apis.views import WorkScheduleViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
+router.register("licence", LicenseViewSet)
+router.register("workshedule", WorkScheduleViewSet)
 router.register("users", UserViewSet)
 router.register("invoices", InvoiceViewSet, basename="invoices")
 router.register("dashboards", DashboardViewSet, basename="dashboards")
