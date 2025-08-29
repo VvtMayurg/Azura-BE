@@ -24,13 +24,11 @@ class BaseModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        from azura_be.users.models import User
-
         user = getattr(current_context, "user", None)
-        if isinstance(user, User):
+        if hasattr(user, "pk"):
             if not self.pk:
-                self.created_by = self.created_by if self.created_by else user
-                self.updated_by = self.updated_by if self.updated_by else user
+                self.created_by = self.created_by if self.created_by else user.pk
+                self.updated_by = self.updated_by if self.updated_by else user.pk
             else:
-                self.updated_by = self.updated_by if self.updated_by else user
+                self.updated_by = self.updated_by if self.updated_by else user.pk
         super().save(*args, **kwargs)

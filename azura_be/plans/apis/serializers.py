@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from azura_be.base.constants import QuestionTypeChoices
 from azura_be.core.apis.serializers import CategorySerializer
 from azura_be.core.apis.serializers import ConditionRelatedSerializer
 from azura_be.core.apis.serializers import FlagSerializer
@@ -10,6 +11,12 @@ from azura_be.plans.models import Form
 from azura_be.plans.models import Plan
 
 
+class QuestionSerializer(serializers.Serializer):
+    question = serializers.CharField()
+    question_type = serializers.ChoiceField(choices=QuestionTypeChoices)
+    choices = serializers.ListField(child=serializers.CharField(), default=[])
+
+
 class FormRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Form
@@ -17,6 +24,8 @@ class FormRelatedSerializer(serializers.ModelSerializer):
 
 
 class FormCreateSerializer(serializers.ModelSerializer):
+    questions = QuestionSerializer()
+
     class Meta:
         model = Form
         fields = (
@@ -38,6 +47,7 @@ class FormSerializer(serializers.ModelSerializer):
     frequency = FrequencySerializer(required=False)
     category = CategorySerializer(required=False)
     flag = FlagSerializer(required=False)
+    questions = QuestionSerializer()
 
     class Meta:
         model = Form
@@ -50,7 +60,22 @@ class PlanRelatedSerializer(serializers.ModelSerializer):
         fields = ("id", "name")
 
 
+class NumberToTrackQuestionSerializer(serializers.Serializer):
+    vitals = serializers.ListField(child=serializers.CharField(), default=[])
+    labs = serializers.ListField(child=serializers.CharField(), default=[])
+
+
 class PlanCreateSerializer(serializers.ModelSerializer):
+    goals = QuestionSerializer(many=True, required=False)
+    barriers = QuestionSerializer(many=True, required=False)
+    symptoms = QuestionSerializer(many=True, required=False)
+    interventions = QuestionSerializer(many=True, required=False)
+    expected_outcomes = QuestionSerializer(many=True, required=False)
+    supports = QuestionSerializer(many=True, required=False)
+    allergies = QuestionSerializer(many=True, required=False)
+    medications = QuestionSerializer(many=True, required=False)
+    number_to_tracks = NumberToTrackQuestionSerializer(required=False)
+
     class Meta:
         model = Plan
         fields = (
@@ -73,6 +98,15 @@ class PlanCreateSerializer(serializers.ModelSerializer):
 class PlanSerializer(serializers.ModelSerializer):
     conditions = ConditionRelatedSerializer(many=True, required=False)
     icd_codes = ICDCodeSerializer(many=True, required=False)
+    goals = QuestionSerializer(many=True, required=False)
+    barriers = QuestionSerializer(many=True, required=False)
+    symptoms = QuestionSerializer(many=True, required=False)
+    interventions = QuestionSerializer(many=True, required=False)
+    expected_outcomes = QuestionSerializer(many=True, required=False)
+    supports = QuestionSerializer(many=True, required=False)
+    allergies = QuestionSerializer(many=True, required=False)
+    medications = QuestionSerializer(many=True, required=False)
+    number_to_tracks = NumberToTrackQuestionSerializer(required=False)
 
     class Meta:
         model = Plan

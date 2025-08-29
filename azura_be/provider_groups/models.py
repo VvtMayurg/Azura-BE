@@ -3,12 +3,14 @@ from django.db import models
 from timezone_field.fields import TimeZoneField
 
 from azura_be.base.constants import ProviderGroupLocationStatusChoices
+from azura_be.base.constants import ProviderGroupTypeChoices
 from azura_be.base.models import BaseModel
 from azura_be.users.models import User
 
 
 class ProviderGroup(BaseModel):
     name = models.CharField(max_length=255, unique=True)
+    group_type = models.CharField(max_length=50, blank=True, choices=ProviderGroupTypeChoices)
     website = models.URLField(blank=True)
     email = models.EmailField(blank=True)
     code = models.CharField(max_length=50, null=True, unique=True)

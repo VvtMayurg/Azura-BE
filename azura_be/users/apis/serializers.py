@@ -41,6 +41,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "timezone",
             "role",
             "two_factor_auth",
+            "email",
+            "departments",
+            "status",
+            "job_title",
         )
 
 
@@ -71,6 +75,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "role",
             "account_user",
             "two_factor_auth",
+            "status",
+            "job_title",
         )
 
 

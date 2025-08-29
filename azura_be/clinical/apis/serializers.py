@@ -33,3 +33,16 @@ class LabResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = LabResult
         exclude = ("patient",)
+
+
+
+class LatestVitalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vital
+        fields = '__all__'
+        
+
+class GraphSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vital
+        fields = ['recorded_at', 'value', 'unit']

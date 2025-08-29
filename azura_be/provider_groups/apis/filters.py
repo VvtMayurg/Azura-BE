@@ -19,7 +19,7 @@ class ProviderGroupFilter(django_filters.FilterSet):
 
     class Meta:
         model = ProviderGroup
-        fields = ["status"]
+        fields = ["status", "group_type"]
 
 
 class DepartmentFilter(django_filters.FilterSet):

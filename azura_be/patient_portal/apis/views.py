@@ -1,10 +1,15 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from azura_be.appointments.apis.serializers import AppointmentSerializer
+from azura_be.appointments.apis.serializers import VaccinePostSerializer
+from azura_be.appointments.apis.serializers import VaccineSerializer
+from azura_be.appointments.filters import VaccineFilter
 from azura_be.appointments.models import Appointment
+from azura_be.appointments.models import Vaccine
 from azura_be.clinical.apis.serializers import LabResultSerializer
 from azura_be.clinical.apis.serializers import MedicationSerializer
 from azura_be.clinical.models import LabResult
@@ -51,3 +56,23 @@ class PatientPortalViewSet(viewsets.GenericViewSet):
     def get_documents(self, request, *args, **kwargs):
         documents = Document.objects.filter(patient=request.patient)
         return Response(DocumentSerializer(documents, many=True).data)
+
+
+class VaccineViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get", "patch", "post"]
+    queryset = Vaccine.objects.all()
+    serializer_class = VaccineSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = VaccineFilter
+
+    def get_queryset(self):
+        self.queryset = self.queryset.filter(patient=self.request.patient)
+        return super().get_queryset()
+
+    def get_serializer_class(self):
+        if self.action in ["create", "partial_update"]:
+            return VaccinePostSerializer
+        return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        return serializer.save(patient=self.request.patient)

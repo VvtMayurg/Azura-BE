@@ -8,6 +8,13 @@ class ProviderGroupLocationStatusChoices(models.TextChoices):
     SUSPENDED = "Suspended"
 
 
+class ProviderGroupTypeChoices(models.TextChoices):
+    HOSPITAL_SYSTEM = "Hospital System"
+    PRIMARY_CARE = "Primary Care"
+    SPECIALTY_CARE = "Specialty Care"
+    URGENT_CARE = "Urgent Care"
+
+
 class DisciplineChoices(models.TextChoices):
     ACUPUNCTURE = "Acupuncture"
     ADMINISTRATIVE = "Administrative"
@@ -190,3 +197,10 @@ class NoteTypeChoices(models.TextChoices):
     NON_VISIT_NOTE = "Non Visit Notes"
     EMAIL = "Email Notes"
     POINT_OF_CARE = "Point of Care Labs"
+
+
+class QuestionTypeChoices(models.TextChoices):
+    FREE_TEXT = "Free Text"
+    SINGLE_SELECT = "Single Select"
+    MULTI_SELECT = "Multi Select"
+    FILE_UPLOAD = "File Upload"

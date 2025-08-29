@@ -12,15 +12,15 @@ from azura_be.business_accounts.models import BusinessAccount
 
 class BusinessAccountMainMiddleware(MiddlewareMixin):
     def process_request(self, request):
+        request.business_account = None
         if request.path.startswith(settings.ADMIN_URL) or request.path.startswith("/api/auth/"):
             return None
 
         connection.set_schema_to_public()
-        request.business_account = None
-        origin = request.headers.get("Origin")
+        origin = request.headers.get("Origin") or request.get_host() or ""
 
         business_account = BusinessAccount.objects.filter(
-            web_address__iexact=origin,
+            web_address__iexact=origin.replace("http://", "").replace("https://", ""),
         ).first()
         if business_account is None:
             return None

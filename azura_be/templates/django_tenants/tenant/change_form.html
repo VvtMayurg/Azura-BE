@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+
+{% load i18n tenant %}
+
+{% block submit_buttons_bottom %}
+  <div class="submit-row">
+    <input type="submit" value="Save" class="default" name="_sav" />
+    <input type="submit" value="Delete" class="default" name="_del" />
+  </div>
+{% endblock %}
