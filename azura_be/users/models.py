@@ -41,6 +41,10 @@ class User(AbstractUser):
         blank=True,
     )
     role = models.CharField(max_length=255, blank=True)
+    practitioner_number = models.CharField(max_length=255, blank=True)
+    ontario_group_number = models.CharField(max_length=255, blank=True)
+    job_title = models.CharField(max_length=255, blank=True)
+    status = models.BooleanField(default=False)
 
     account_user = models.BooleanField(default=False)
     two_factor_auth = models.BooleanField(default=False)

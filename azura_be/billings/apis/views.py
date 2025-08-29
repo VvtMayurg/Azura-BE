@@ -9,6 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 from azura_be.billings.apis.serializers import CalculateValueResponseSerializer
 from azura_be.billings.apis.serializers import CalculateValueSerializer
 from azura_be.billings.apis.serializers import DiagnosticCodeResponseSerializer
+from azura_be.billings.apis.serializers import EligibilityCheckResponseSerializer
 from azura_be.billings.apis.serializers import MasterNumberResponseSerializer
 from azura_be.billings.apis.serializers import ServiceCodeResponseSerializer
 from azura_be.billings.service import GovernmentBillingService
@@ -90,3 +91,98 @@ class InvoiceViewSet(GenericViewSet):
         serializer = CalculateValueSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         return Response(self.billing_service.execute("POST", "calculate_values", {}, serializer.validated_data))
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name="health_number", description="Patient's health care number", required=True, type=OpenApiTypes.STR),
+            OpenApiParameter(name="birth_date", description="Patient's birth date (YYYY-MM-DD)", required=True, type=OpenApiTypes.STR),
+            OpenApiParameter(name="service_code", description="Time limited service code to be checked", required=True, type=OpenApiTypes.STR),
+            OpenApiParameter(name="ontario_version_code", description="Patient heath care version code", required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(
+                name="check_status",
+                description="Force a check_status to simulate a pending vs completed check",
+                required=False,
+                type=OpenApiTypes.STR,
+            ),
+        ],
+        responses=EligibilityCheckResponseSerializer,
+    )
+    @action(detail=False, methods=["GET"], url_path="check-service-eligibility")
+    def check_service_eligibility(self, request):
+        health_number = request.query_params.get("health_number")
+        birth_date = request.query_params.get("birth_date")
+        service_code = request.query_params.get("service_code")
+        ontario_version_code = request.query_params.get("ontario_version_code")
+        check_status = request.query_params.get("check_status")
+
+        if not health_number:
+            return Response({"health_number": "Health number is required"}, status=400)
+        if not birth_date:
+            return Response({"birth_date": "Birth date is required"}, status=400)
+        if not service_code:
+            return Response({"service_code": "Service code is required"}, status=400)
+
+        return Response(
+            self.billing_service.execute(
+                "GET",
+                "eligibility_check",
+                params={
+                    "health_number": health_number,
+                    "birth_date": birth_date,
+                    "service_code": service_code,
+                    "ontario_version_code": ontario_version_code,
+                    "check_status": check_status,
+                },
+            ),
+        )
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name="health_number", description="Patient's health care number", required=True, type=OpenApiTypes.STR),
+            OpenApiParameter(name="ontario_version_code", description="Patient heath care version code", required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(
+                name="check_status",
+                description="Force a check_status to simulate a pending vs completed check",
+                required=False,
+                type=OpenApiTypes.STR,
+            ),
+            OpenApiParameter(
+                name="is_eligible",
+                description="Allows you to simulate both eligible and ineligible patients",
+                required=False,
+                type=OpenApiTypes.BOOL,
+            ),
+        ],
+        responses=EligibilityCheckResponseSerializer,
+    )
+    @action(detail=False, methods=["GET"], url_path="check-eligibility")
+    def check_eligibility(self, request):
+        health_number = request.query_params.get("health_number")
+        ontario_version_code = request.query_params.get("ontario_version_code")
+        check_status = request.query_params.get("check_status")
+        is_eligible = request.query_params.get("is_eligible")
+
+        if not health_number:
+            return Response({"health_number": "Health number is required"}, status=400)
+
+        return Response(
+            self.billing_service.execute(
+                "GET",
+                "eligibility",
+                params={
+                    "health_number": health_number,
+                    "ontario_version_code": ontario_version_code,
+                    "check_status": check_status,
+                    "is_eligible": is_eligible,
+                },
+            ),
+        )
+
+    @extend_schema(
+        responses=EligibilityCheckResponseSerializer,
+    )
+    @action(detail=False, methods=["POST"], url_path="create-invoice")
+    def create_invoice(self, request):
+        serializer = EligibilityCheckResponseSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(self.billing_service.execute("POST", "create_invoice", {}, serializer.validated_data))

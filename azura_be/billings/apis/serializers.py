@@ -52,6 +52,23 @@ class MasterNumberResponseSerializer(serializers.Serializer):
     meta_info = MetaInfoSerializer()
 
 
+class EligibilityCheckDataSerializer(serializers.Serializer):
+    service_code = serializers.CharField()
+    fee_service_code = serializers.CharField()
+    fee_service_date = serializers.DateField()
+    fee_service_response_code = serializers.CharField()
+    fee_service_response_description = serializers.CharField()
+    eligibility_queued_at = serializers.DateTimeField()
+    eligibility_checked_at = serializers.DateField()
+    check_status = serializers.CharField()
+
+
+class EligibilityCheckResponseSerializer(serializers.Serializer):
+    result = serializers.CharField()
+    data = EligibilityCheckDataSerializer(many=True)
+    meta_info = MetaInfoSerializer()
+
+
 class CalculateValueSerializer(serializers.Serializer):
     service_code = serializers.CharField()
     fee_override = serializers.CharField(allow_blank=True)

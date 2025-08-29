@@ -157,9 +157,18 @@ class AgeDistributionSerializer(serializers.Serializer):
 
 
 class MonthlyRegistrationsSerializer(serializers.Serializer):
-    jan = serializers.IntegerField()
-    feb = serializers.IntegerField()
-    dec = serializers.IntegerField()
+    january = serializers.IntegerField()
+    february = serializers.IntegerField()
+    march = serializers.IntegerField()
+    april = serializers.IntegerField()
+    may = serializers.IntegerField()
+    june = serializers.IntegerField()
+    july = serializers.IntegerField()
+    august = serializers.IntegerField()
+    september = serializers.IntegerField()
+    october = serializers.IntegerField()
+    november = serializers.IntegerField()
+    december = serializers.IntegerField()
 
 
 class TopPerformingProviderSerializer(serializers.Serializer):

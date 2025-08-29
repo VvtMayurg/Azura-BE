@@ -8,6 +8,13 @@ class ProviderGroupLocationStatusChoices(models.TextChoices):
     SUSPENDED = "Suspended"
 
 
+class ProviderGroupTypeChoices(models.TextChoices):
+    HOSPITAL_SYSTEM = "Hospital System"
+    PRIMARY_CARE = "Primary Care"
+    SPECIALTY_CARE = "Specialty Care"
+    URGENT_CARE = "Urgent Care"
+
+
 class DisciplineChoices(models.TextChoices):
     ACUPUNCTURE = "Acupuncture"
     ADMINISTRATIVE = "Administrative"

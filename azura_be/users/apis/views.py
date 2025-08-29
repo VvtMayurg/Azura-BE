@@ -148,7 +148,7 @@ class UserViewSet(
         serilaizer = LicenseGetSerializer(licenses, many=True)
         return Response(serilaizer.data)
 
-    @extend_schema(responses=UserPreferenceSerializer)
+    @extend_schema(responses=UserPreferenceSerializer, request=UserPreferenceSerializer)
     @action(
         detail=False,
         methods=["GET", "POST"],

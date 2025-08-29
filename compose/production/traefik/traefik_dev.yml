@@ -10,6 +10,14 @@ entryPoints:
     #   redirections:
     #     entryPoint:
     #       to: web-secure
+    transport:
+      lifeCycle:
+        requestAcceptGraceTimeout: 0
+        graceTimeOut: 0
+      respondingTimeouts:
+        readTimeout: 600s
+        writeTimeout: 600s
+        idleTimeout: 600s
 
   # web-secure:
   #   # https

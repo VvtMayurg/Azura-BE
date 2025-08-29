@@ -15,8 +15,11 @@ class Patient(BaseModel):
     middle_name = models.CharField(max_length=60, blank=True)
     last_name = models.CharField(max_length=60)
     date_of_birth = models.DateField()
+    admission_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=25, choices=GenderChoices)
     mrn = models.CharField(max_length=50, blank=True)
+    health_number = models.CharField(max_length=25, unique=True, null=True)
+    guardian_health_number = models.CharField(max_length=25, blank=True)
     provider_group = models.ForeignKey(
         ProviderGroup,
         on_delete=models.PROTECT,
